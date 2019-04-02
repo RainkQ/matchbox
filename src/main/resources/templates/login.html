@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录 - 火柴盒</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <script crossorigin="anonymous"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <link href="../static/bootstrap-4.2.1/css/bootstrap.css" rel="stylesheet"
+          th:href="@{/bootstrap-4.2.1/css/bootstrap.css}"/>
+    <link href="../static/bootstrap-4.2.1/css/doc.min.css" rel="stylesheet"
+          th:href="@{/bootstrap-4.2.1/css/doc.min.css}"/>
+    <script src="../static/bootstrap-4.2.1/js/bootstrap.min.js"
+            th:src="@{/bootstrap-4.2.1/js/bootstrap.min.js}"></script>
+
+    <style>
+        body {
+            background-color: #404040;
+        }
+
+        .back {
+            height: 100%;
+            display: -ms-flexbox;
+            display: -webkit-box;
+            display: flex;
+            -ms-flex-align: center;
+            -ms-flex-pack: center;
+            -webkit-box-align: center;
+            align-items: center;
+            -webkit-box-pack: center;
+            justify-content: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+
+        .form-signin {
+            width: 100%;
+            max-width: 330px;
+            padding: 15px;
+            margin: 0 auto;
+        }
+
+        .form-signin .checkbox {
+            font-weight: 400;
+        }
+
+        .form-signin .form-control {
+            position: relative;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
+
+        .form-signin input[type="email"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .form-signin input[type="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="back">
+
+    <!--表单-->
+    <form class="form-signin card text-center" id="form" method="post" role="form">
+        <!--          th:action="'/log'+${log}"-->
+        <h1 class="h3 mb-3 font-weight-normal">
+            登录
+        </h1>
+        <!--        <h1 class="h3 mb-3 font-weight-normal" th:if="${log}=='Up'">-->
+        <!--            注册-->
+        <!--        </h1>-->
+
+        <!--错误提示-->
+        <!--        <div class="alert alert-success alert-dismissable" th:if="${logFailure}!=''">-->
+        <!--            <button aria-hidden="true" class="close" data-dismiss="alert" type="button">×</button>-->
+        <!--            <h4 th:text="${logFailure}">-->
+        <!--                Error!-->
+        <!--            </h4>-->
+        <!--        </div>-->
+
+
+        <div class="form-group">
+            <label for="username">用户名</label>
+            <input class="form-control" id="username" name="username" type="text"/>
+        </div>
+        <div class="form-group">
+            <label for="passwordMD5">密码</label>
+            <input class="form-control" id="passwordMD5" name="passwordMD5" type="password"/>
+        </div>
+        <!--重复密码-->
+        <!--        <div class="form-group" th:if="${log}=='Up'">-->
+        <!--            <label for="passwordMD5check">重复密码</label>-->
+        <!--            <input class="form-control" id="passwordMD5check" oninput="checkPasswd()" type="password"/>-->
+        <!--        </div>-->
+
+
+        <button class="btn btn-lg btn-primary btn-block submit">登录</button>
+        <a class="btn btn-lg btn-secondary btn-block " href="/logUp">没有账号？注册！</a>
+
+        <!--        <button class="btn btn-lg btn-primary btn-block submit" disabled="true" th:if="${log}=='Up'">密码不一致</button>-->
+        <!--        <a class="btn btn-lg btn-secondary btn-block " href="/logIn" th:if="${log}=='Up'">有账号？登录！</a>-->
+        <p class="mt-5 mb-3 text-muted">© 2019-2020</p>
+    </form>
+
+</div>
+<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".submit").click(function () {
+            let ori_password = $("#passwordMD5").val();
+            let password = md5(ori_password);
+            $("#passwordMD5").val(password);
+            $("#form").submit();
+        });
+    });
+
+</script>
+<!--<script th:if="${log}=='Up'">-->
+
+<!--    function checkPasswd() {-->
+<!--        let ori_password = $("#passwordMD5").val();-->
+<!--        let ori_passwordcheck = $("#passwordMD5check").val();-->
+
+<!--        if (ori_password !== ori_passwordcheck) {-->
+<!--            $(".submit").attr('disabled', true);-->
+<!--            $(".submit").text("密码不一致");-->
+<!--        } else {-->
+<!--            $(".submit").attr('disabled', false);-->
+<!--            $(".submit").text("注册");-->
+<!--        }-->
+<!--    }-->
+
+
+<!--    $(document).ready(function () {-->
+
+
+<!--        $(".submit").click(function () {-->
+<!--            let ori_password = $("#passwordMD5").val();-->
+<!--            let password = md5(ori_password);-->
+<!--            $("#passwordMD5").val(password);-->
+<!--            $("#passwordMD5check").val(password);-->
+<!--            $("#form").submit();-->
+<!--        });-->
+<!--    });-->
+
+<!--</script>-->
+</body>
+</html>

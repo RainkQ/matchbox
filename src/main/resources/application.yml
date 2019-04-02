@@ -1,3 +1,37 @@
 server:
   port: 80
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+  jpa:
+    database: postgresql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        temp:
+          use_jdbc_metadata_defaults: false
 
+  datasource:
+    url: jdbc:postgresql://101.132.120.236:5432/matchbox?useSSl=false&useunicode=true&characterEncoding=utf8
+    driver-class-name: org.postgresql.Driver
+    username: "postgres"
+    password: "postgres"
+
+  redis:
+    database: 0
+    host: 101.132.120.236
+    port: 6379
+    password:
+
+
+  thymeleaf:
+    cache: false
+    suffix: .html
