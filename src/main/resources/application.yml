@@ -35,3 +35,11 @@ spring:
   thymeleaf:
     cache: false
     suffix: .html
+    prefix: classpath:/templates/
+
+  main:
+    allow-bean-definition-overriding: true
+
+
+shiro:
+  loginUrl: /login

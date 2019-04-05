@@ -80,7 +80,7 @@
 <div class="back">
 
     <!--表单-->
-    <form class="form-signin card text-center" id="form" method="post" role="form">
+    <form action="/login" class="form-signin card text-center" id="form" method="post" role="form">
         <!--          th:action="'/log'+${log}"-->
         <h1 class="h3 mb-3 font-weight-normal">
             登录
@@ -90,12 +90,12 @@
         <!--        </h1>-->
 
         <!--错误提示-->
-        <!--        <div class="alert alert-success alert-dismissable" th:if="${logFailure}!=''">-->
-        <!--            <button aria-hidden="true" class="close" data-dismiss="alert" type="button">×</button>-->
-        <!--            <h4 th:text="${logFailure}">-->
-        <!--                Error!-->
-        <!--            </h4>-->
-        <!--        </div>-->
+        <div class="alert alert-success alert-dismissable" th:if="${msg}!=''">
+            <button aria-hidden="true" class="close" data-dismiss="alert" type="button">×</button>
+            <h4 th:text="${msg}">
+                Error!
+            </h4>
+        </div>
 
 
         <div class="form-group">
@@ -104,7 +104,7 @@
         </div>
         <div class="form-group">
             <label for="passwordMD5">密码</label>
-            <input class="form-control" id="passwordMD5" name="passwordMD5" type="password"/>
+            <input class="form-control" id="passwordMD5" name="password" type="password"/>
         </div>
         <!--重复密码-->
         <!--        <div class="form-group" th:if="${log}=='Up'">-->
@@ -122,18 +122,7 @@
     </form>
 
 </div>
-<script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
-<script>
-    $(document).ready(function () {
-        $(".submit").click(function () {
-            let ori_password = $("#passwordMD5").val();
-            let password = md5(ori_password);
-            $("#passwordMD5").val(password);
-            $("#form").submit();
-        });
-    });
 
-</script>
 <!--<script th:if="${log}=='Up'">-->
 
 <!--    function checkPasswd() {-->
