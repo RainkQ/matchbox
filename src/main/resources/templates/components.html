@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-cn"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <!-- Bootstrap CSS -->
+    <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" rel="stylesheet">
+
+    <title>Title</title>
+</head>
+<body>
+
+
+<header class="sticky-top" th:fragment="navBar(activeUrl,user)">
+    <nav class=" navbar navbar-expand-lg navbar-dark  shadow-lg" style="background-color: #ab402c">
+        <a class="navbar-brand mb-0 h1" href="/">
+            <img class="d-inline-block align-top" height="30" src="/img/logo.svg" width="30">
+            MatchBox
+        </a>
+        <button aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler" data-target="#navbarNavAltMarkup" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav flex-row">
+                <a class="nav-item nav-link"
+                   href="#"
+                   th:class="${activeUrl=='index'?'nav-item nav-link active':'nav-item nav-link'}">主页</a>
+                <a class="nav-item nav-link"
+                   href="#"
+                   th:class="${activeUrl=='index'?'nav-item nav-link active':'nav-item nav-link'}">喧哗</a>
+                <a class="nav-item nav-link"
+                   href="#"
+                   th:class="${activeUrl=='index'?'nav-item nav-link active':'nav-item nav-link'}">骚动</a>
+
+
+            </div>
+        </div>
+        <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+            <li class="nav-item dropdown"
+                th:class="${activeUrl=='log'?'nav-item dropdown active':'nav-item dropdown'}">
+                <a aria-expanded="false"
+                   aria-haspopup="true"
+                   class="nav-item nav-link dropdown-toggle mr-md-2"
+                   data-toggle="dropdown"
+                   href="#"
+                   id="bd-versions"
+                   th:text="${user.username}"
+                >
+                    用户
+                </a>
+                <div aria-labelledby="bd-versions" class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="/login" th:if="${user.username}=='未登录'">登录</a>
+                    <a class="dropdown-item" href="/logup" th:if="${user.username}=='未登录'">注册</a>
+
+                    <a class="dropdown-item" href="/logoff" th:if="${user.username}!='未登录'">退出</a>
+                </div>
+            </li>
+        </ul>
+
+    </nav>
+</header>
+
+
+<footer class="fixed-bottom bg-light" th:fragment="footBar">
+    <p class="text-center">&copy; 2019 TNICY</p>
+</footer>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script crossorigin="anonymous"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+</body>
+</html>
