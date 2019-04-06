@@ -10,11 +10,14 @@ import java.io.Serializable;
 @Data
 public class Feature implements Serializable {
     @Id
+    @GeneratedValue(generator = "feature_generator")
+    @SequenceGenerator(
+            name = "feature_generator",
+            sequenceName = "feature_sequence",
+            initialValue = 1000
+    )
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 
 
 }

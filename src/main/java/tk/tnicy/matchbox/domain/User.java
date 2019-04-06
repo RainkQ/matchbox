@@ -19,9 +19,12 @@ public class User implements Serializable {
     )
     private Long id;
 
+    @Column(unique = true)
     private String username;
     private String password;
     private String salt;
 
-
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "feature_id")
+    private Feature feature;
 }

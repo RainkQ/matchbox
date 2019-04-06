@@ -1,7 +1,7 @@
 server:
-  port: 80
   tomcat:
     uri-encoding: UTF-8
+  port: 80
 spring:
   http:
     encoding:
@@ -37,9 +37,4 @@ spring:
     suffix: .html
     prefix: classpath:/templates/
 
-  main:
-    allow-bean-definition-overriding: true
 
-
-shiro:
-  loginUrl: /login
