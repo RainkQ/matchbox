@@ -8,13 +8,36 @@
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+    <style>
+        /*web background*/
+        .container {
+            display: table;
+            height: 100%;
+        }
 
+        .row {
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        /* centered columns styles */
+        .row-centered {
+            text-align: center;
+        }
+
+        .col-centered {
+            display: inline-block;
+            float: none;
+            text-align: left;
+            margin-right: -4px;
+        }
+    </style>
 </head>
 <body>
 <!--/*@thymesVar id="error" type="java.lang.String"*/-->
 <div class="container">
 
-    <div class="card shadow-lg">
+    <div class="card shadow-lg row row-centered">
         <div>
             <p class="text-center" th:text="${error}"></p>
 

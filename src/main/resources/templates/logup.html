@@ -8,6 +8,7 @@
     <link crossorigin="anonymous" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
 
+
     <style>
         body {
             background-color: #404040;
@@ -68,15 +69,15 @@
 
 <body>
 
-<header th:replace="components::navBar(login,${username})"></header>
+<header th:replace="components::navBar(logup,${username})"></header>
+
 <div class="back">
 
     <!--表单-->
-    <form action="/login" class="form-signin card text-center" id="form" method="post" role="form">
+    <form action="/logup" class="form-signin card text-center" id="form" method="post" role="form">
         <h1 class="h3 mb-3 font-weight-normal">
-            登录
+            注册
         </h1>
-
 
         <!--错误提示-->
         <div class="alert alert-success alert-dismissable" th:unless="${#strings.isEmpty(msg)}">
@@ -95,16 +96,35 @@
             <label for="password">密码</label>
             <input class="form-control" id="password" name="password" type="password"/>
         </div>
-
-
-
-        <button class="btn btn-lg btn-primary btn-block submit">登录</button>
-        <a class="btn btn-lg btn-secondary btn-block " href="/logup">没有账号？注册！</a>
-
+        <div class="form-group">
+            <label for="passwordCheck">重复密码</label>
+            <input class="form-control" id="passwordCheck" oninput="checkPasswd()" type="password"/>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block submit" disabled="true">密码不一致</button>
+        <a class="btn btn-lg btn-secondary btn-block " href="/login">有账号？登录！</a>
     </form>
 
 </div>
+
 <footer th:replace="components::footBar"></footer>
+
+<script>
+
+    function checkPasswd() {
+        let ori_password = $("#password").val();
+        let ori_passwordcheck = $("#passwordCheck").val();
+
+        if (ori_password !== ori_passwordcheck) {
+            $(".submit").attr('disabled', true);
+            $(".submit").text("密码不一致");
+        } else {
+            $(".submit").attr('disabled', false);
+            $(".submit").text("注册");
+        }
+    }
+
+
+</script>
 
 
 <!-- Optional JavaScript -->

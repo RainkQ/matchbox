@@ -27,4 +27,6 @@ public class User implements Serializable {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "feature_id")
     private Feature feature;
+
+
 }
