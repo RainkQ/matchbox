@@ -3,6 +3,7 @@ package tk.tnicy.matchbox.service;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tk.tnicy.matchbox.domain.Feature;
 import tk.tnicy.matchbox.domain.User;
@@ -17,6 +18,8 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+
+    @Cacheable(value = "users", key = "#id", unless = "#result == null")
     public List<String> getPermissionsByUserId(Long id) {
         Optional<User> byId = userRepository.findById(id);
         ArrayList<String> permissions = new ArrayList<>();
@@ -57,4 +60,20 @@ public class UserService {
         System.out.println("已有用户：" + hadUser.toString());
         return false;
     }
+
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+
+    public User findUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
+    }
+
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+
 }

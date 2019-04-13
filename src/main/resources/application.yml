@@ -36,5 +36,7 @@ spring:
     cache: false
     suffix: .html
     prefix: classpath:/templates/
-
+  cache:
+    redis:
+      time-to-live: 600000
 
