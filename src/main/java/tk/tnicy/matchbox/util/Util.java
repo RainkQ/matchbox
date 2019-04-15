@@ -5,31 +5,49 @@ import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import tk.tnicy.matchbox.domain.Feature;
+import tk.tnicy.matchbox.domain.User;
+import tk.tnicy.matchbox.service.UserService;
 
 public class Util {
-    public static boolean injectUser(Model model) {
-        Subject subject = SecurityUtils.getSubject();
-        String username = (String) SecurityUtils.getSubject().getPrincipal();
 
-//        System.out.println(user.toString());
-        if (subject.isAuthenticated()) {
-            model.addAttribute("username", username);
-            return true;
-        } else {
-            model.addAttribute("username", "未登录");
-            return false;
+
+    public static Session injectUser(UserService userService, Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        String username = (String) subject.getPrincipal();
+        User user = null;
+        if (!StringUtils.isEmpty(username)) {
+            user = userService.findUserByUsername(username);
         }
+
+        if (user == null) {
+            user = new User();
+            user.setUsername("未登录");
+            user.setPassword("");
+            user.setFeature(new Feature());
+            user.setId(-1L);
+        }
+
+        model.addAttribute("user", user);
+
+        return subject.getSession();
+
+
     }
 
 
-    public static boolean login(String username, String password, Model model) {
-        Subject user = SecurityUtils.getSubject();
+    public static boolean login(UserService userService, String username, String password, Model model) {
+        Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         try {
-            user.login(token);
+            subject.login(token);
             model.addAttribute("msg", "");
+            User user = userService.findUserByUsername(username);
+            subject.getSession().setAttribute("user", user);
             return true;
         } catch (UnknownAccountException e) {
             //账号不存在和下面密码错误一般都合并为一个账号或密码错误，这样可以增加暴力破解难度

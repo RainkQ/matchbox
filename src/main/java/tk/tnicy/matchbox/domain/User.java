@@ -1,13 +1,17 @@
 package tk.tnicy.matchbox.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "normal_user")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class User implements Serializable {
 
     @Id
@@ -28,5 +32,13 @@ public class User implements Serializable {
     @JoinColumn(name = "feature_id")
     private Feature feature;
 
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                '}';
+    }
 }

@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+
     @Cacheable(value = "users", key = "#username", unless = "#result == null")
     User findUserByUsername(String username);
 

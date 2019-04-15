@@ -21,7 +21,8 @@
 
 
 <!--Navbar -->
-<nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color lighten-1" th:fragment="navBar(activeUrl,username)">
+<!--/*@thymesVar id="user" type="tk.tnicy.matchbox.domain.User"*/-->
+<nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color lighten-1" th:fragment="navBar(activeUrl,user)">
     <a class="navbar-brand" href="/">
         <img alt="mdb logo" class="d-inline-block align-top"
              src="/assets/img/logo.svg"> MatchBox
@@ -70,14 +71,14 @@
                    data-toggle="dropdown" id="userInfo">
                     <img alt="avatar image" class="rounded-circle z-depth-0"
                          src="assets/img/avatar.png">
-                    <span class="align-middle" th:text="${username}"></span>
+                    <span class="align-middle" th:text="${user.getUsername()}"></span>
 
                 </a>
                 <div aria-labelledby="userInfo"
                      class="dropdown-menu  dropdown-secondary">
-                    <a class="dropdown-item" href="/login" th:if="${username}=='未登录'">登录</a>
-                    <a class="dropdown-item" href="/logup" th:if="${username}=='未登录'">注册</a>
-                    <a class="dropdown-item" href="/logout" th:if="${username}!='未登录'">退出</a>
+                    <a class="dropdown-item" href="/login" th:if="${user.getUsername()}=='未登录'">登录</a>
+                    <a class="dropdown-item" href="/logup" th:if="${user.getUsername()}=='未登录'">注册</a>
+                    <a class="dropdown-item" href="/logout" th:if="${user.getUsername()}!='未登录'">退出</a>
                 </div>
             </li>
         </ul>
@@ -89,45 +90,54 @@
 <!-- Footer -->
 <footer class="page-footer font-small special-color-dark pt-4 fixed-bottom" th:fragment="footBar">
 
-    <!--    &lt;!&ndash; Footer Elements &ndash;&gt;-->
-    <!--    <div class="container">-->
+    <!-- Footer Elements -->
+    <div class="container">
 
-    <!--        &lt;!&ndash; Social buttons &ndash;&gt;-->
-    <!--        <ul class="list-unstyled list-inline text-center">-->
-    <!--            <li class="list-inline-item">-->
-    <!--                <a class="btn-floating btn-fb mx-1">-->
-    <!--                    <i class="fab fa-facebook-f"> </i>-->
-    <!--                </a>-->
-    <!--            </li>-->
-    <!--            <li class="list-inline-item">-->
-    <!--                <a class="btn-floating btn-tw mx-1">-->
-    <!--                    <i class="fab fa-twitter"> </i>-->
-    <!--                </a>-->
-    <!--            </li>-->
-    <!--            <li class="list-inline-item">-->
-    <!--                <a class="btn-floating btn-gplus mx-1">-->
-    <!--                    <i class="fab fa-google-plus-g"> </i>-->
-    <!--                </a>-->
-    <!--            </li>-->
-    <!--            <li class="list-inline-item">-->
-    <!--                <a class="btn-floating btn-li mx-1">-->
-    <!--                    <i class="fab fa-linkedin-in"> </i>-->
-    <!--                </a>-->
-    <!--            </li>-->
-    <!--            <li class="list-inline-item">-->
-    <!--                <a class="btn-floating btn-dribbble mx-1">-->
-    <!--                    <i class="fab fa-dribbble"> </i>-->
-    <!--                </a>-->
-    <!--            </li>-->
-    <!--        </ul>-->
-    <!--        &lt;!&ndash; Social buttons &ndash;&gt;-->
+        <!-- Social buttons -->
+        <!--            <ul class="list-unstyled list-inline text-center">-->
+        <!--                <li class="list-inline-item">-->
+        <!--                    <a class="btn-floating btn-fb mx-1">-->
+        <!--                        <i class="fab fa-facebook-f"> </i>-->
+        <!--                    </a>-->
+        <!--                </li>-->
+        <!--                <li class="list-inline-item">-->
+        <!--                    <a class="btn-floating btn-tw mx-1">-->
+        <!--                        <i class="fab fa-twitter"> </i>-->
+        <!--                    </a>-->
+        <!--                </li>-->
+        <!--                <li class="list-inline-item">-->
+        <!--                    <a class="btn-floating btn-gplus mx-1">-->
+        <!--                        <i class="fab fa-google-plus-g"> </i>-->
+        <!--                    </a>-->
+        <!--                </li>-->
+        <!--                <li class="list-inline-item">-->
+        <!--                    <a class="btn-floating btn-li mx-1">-->
+        <!--                        <i class="fab fa-linkedin-in"> </i>-->
+        <!--                    </a>-->
+        <!--                </li>-->
+        <!--                <li class="list-inline-item">-->
+        <!--                    <a class="btn-floating btn-dribbble mx-1">-->
+        <!--                        <i class="fab fa-dribbble"> </i>-->
+        <!--                    </a>-->
+        <!--                </li>-->
+        <!--            </ul>-->
+        <div class="alert alert-block  fade show" id="warning-block" style="display: none">
+            <button class="close text-white" data-dismiss="alert" type="button">&times;</button>
+            <h4>♥ 感谢产品经理仙儿!</h4>muuuuuuuuua👄
+        </div>
+        <!-- Social buttons -->
 
-    <!--    </div>-->
+    </div>
     <!-- Footer Elements -->
 
     <!-- Copyright -->
     <div class="footer-copyright text-center py-3">© 2019 Copyright:
-        <a href="/"> MatchBox.com</a>
+        <a onclick="f()"> MatchBox.com</a>
+        <script>
+            function f() {
+                $("#warning-block").show();
+            }
+        </script>
     </div>
     <!-- Copyright -->
 

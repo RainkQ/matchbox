@@ -1,7 +1,7 @@
 server:
   tomcat:
     uri-encoding: UTF-8
-  port: 80
+  port: 49521
 spring:
   http:
     encoding:
@@ -18,7 +18,8 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         temp:
           use_jdbc_metadata_defaults: false
-
+        enable_lazy_load_no_trans: true
+    open-in-view: true
   datasource:
     url: jdbc:postgresql://101.132.120.236:5432/matchbox?useSSl=false&useunicode=true&characterEncoding=utf8
     driver-class-name: org.postgresql.Driver
