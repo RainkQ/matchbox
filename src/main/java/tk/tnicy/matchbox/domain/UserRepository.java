@@ -1,5 +1,6 @@
 package tk.tnicy.matchbox.domain;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,6 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Cacheable(value = "users", key = "'findAll'", unless = "#result == null")
     List<User> findAll();
 
-
-
+    @CacheEvict(value = "users", key = "#user.getUsername()")
+    void delete(User user);
 }

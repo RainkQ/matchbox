@@ -43,7 +43,7 @@ public class UserRealm extends AuthorizingRealm {
             return null;
         }
         ByteSource salt = ByteSource.Util.bytes(user.getSalt());
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), salt, this.getName());
-        return info;
+
+        return new SimpleAuthenticationInfo(user, user.getPassword(), salt, this.getName());
     }
 }

@@ -8,7 +8,6 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import tk.tnicy.matchbox.domain.Feature;
 import tk.tnicy.matchbox.domain.User;
 import tk.tnicy.matchbox.service.UserService;
@@ -16,13 +15,9 @@ import tk.tnicy.matchbox.service.UserService;
 public class Util {
 
 
-    public static Session injectUser(UserService userService, Model model) {
+    public static Session injectUser(Model model) {
         Subject subject = SecurityUtils.getSubject();
-        String username = (String) subject.getPrincipal();
-        User user = null;
-        if (!StringUtils.isEmpty(username)) {
-            user = userService.findUserByUsername(username);
-        }
+        User user = (User) subject.getPrincipal();
 
         if (user == null) {
             user = new User();
@@ -46,7 +41,7 @@ public class Util {
         try {
             subject.login(token);
             model.addAttribute("msg", "");
-            User user = userService.findUserByUsername(username);
+            User user = (User) subject.getPrincipal();
             subject.getSession().setAttribute("user", user);
             return true;
         } catch (UnknownAccountException e) {
@@ -60,5 +55,12 @@ public class Util {
             model.addAttribute("msg", "未知错误！");
         }
         return false;
+    }
+
+
+    public static User getCurrentUser() {
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+        System.out.println("现在用户:" + user);
+        return user;
     }
 }

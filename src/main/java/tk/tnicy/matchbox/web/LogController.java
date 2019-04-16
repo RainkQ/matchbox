@@ -1,6 +1,7 @@
 package tk.tnicy.matchbox.web;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.web.util.SavedRequest;
 import org.apache.shiro.web.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import tk.tnicy.matchbox.domain.User;
 import tk.tnicy.matchbox.service.UserService;
 import tk.tnicy.matchbox.util.Util;
 
@@ -30,7 +32,7 @@ public class LogController {
             return "redirect:/";
         }
 
-        Util.injectUser(userService, model);
+        Util.injectUser(model);
 
         return "login";
     }
@@ -38,7 +40,7 @@ public class LogController {
 
     @PostMapping("/login")
     public Object postLogin(HttpServletRequest request, String username, String password, Model model) {
-        Util.injectUser(userService, model);
+        Util.injectUser(model);
         if (Util.login(userService, username, password, model)) {
             SavedRequest savedRequest = WebUtils.getSavedRequest(request);
             if (savedRequest == null || savedRequest.getRequestUrl() == null) {
@@ -54,7 +56,7 @@ public class LogController {
 
     @GetMapping("/logup")
     public String getLogup(Model model) {
-        Util.injectUser(userService, model);
+        Util.injectUser(model);
         return "logup";
     }
 
@@ -63,7 +65,7 @@ public class LogController {
                             @RequestParam("password") String password,
                             Model model) {
 
-        Util.injectUser(userService, model);
+        Util.injectUser(model);
 
         boolean result = userService.registerUser(username, password);
         if (result) {
@@ -81,5 +83,17 @@ public class LogController {
     public String logout() {
         SecurityUtils.getSubject().logout();
         return "redirect:/login";
+    }
+
+
+    @RequiresPermissions("normal")
+    @RequestMapping("/deleteMe")
+    public String getUserInfo() {
+
+        User user = Util.getCurrentUser();
+        userService.delete(user);
+        SecurityUtils.getSubject().logout();
+        return "redirect:/login";
+
     }
 }
