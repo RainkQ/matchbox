@@ -35,29 +35,30 @@
         <ul class="navbar-nav mr-auto">
             <li class="nav-item"
                 th:class="${activeUrl=='index'?'nav-item active':'nav-item'}">
-                <a class="nav-link" href="/">Home
+                <a class="nav-link" href="/">首页
                 </a>
             </li>
             <li class="nav-item"
-                th:class="${activeUrl=='a'?'nav-item active':'nav-item'}">
-                <a class="nav-link" href="#">Features
+                th:class="${activeUrl=='explore'?'nav-item active':'nav-item'}">
+                <a class="nav-link" href="/explore">探索广场
                 </a>
             </li>
             <li class="nav-item"
-                th:class="${activeUrl=='b'?'nav-item active':'nav-item'}">
-                <a class="nav-link" href="#">Pricing</a>
-            </li>
-            <li class="nav-item dropdown"
-                th:class="${activeUrl=='c'?'nav-item dropdown active':'nav-item dropdown'}">
-                <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
-                   data-toggle="dropdown" id="dropdownAA">Dropdown
+                th:class="${activeUrl=='friends'?'nav-item active':'nav-item'}">
+                <a class="nav-link" href="/friends">朋友
                 </a>
-                <div aria-labelledby="dropdownAA" class="dropdown-menu dropdown-secondary">
-                    <a class="dropdown-item" href="#">Action</a>
-                    <a class="dropdown-item" href="#">Another action</a>
-                    <a class="dropdown-item" href="#">Something else here</a>
-                </div>
             </li>
+            <!--            <li class="nav-item dropdown"-->
+            <!--                th:class="${activeUrl=='c'?'nav-item dropdown active':'nav-item dropdown'}">-->
+            <!--                <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"-->
+            <!--                   data-toggle="dropdown" id="dropdownAA">Dropdown-->
+            <!--                </a>-->
+            <!--                <div aria-labelledby="dropdownAA" class="dropdown-menu dropdown-secondary">-->
+            <!--                    <a class="dropdown-item" href="#">Action</a>-->
+            <!--                    <a class="dropdown-item" href="#">Another action</a>-->
+            <!--                    <a class="dropdown-item" href="#">Something else here</a>-->
+            <!--                </div>-->
+            <!--            </li>-->
         </ul>
         <ul class="navbar-nav ml-auto nav-flex-icons">
             <!--            <li class="nav-item">-->
@@ -70,7 +71,7 @@
                 <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
                    data-toggle="dropdown" id="userInfo">
                     <img alt="avatar image" class="rounded-circle z-depth-0"
-                         src="assets/img/avatar.png">
+                         src="/assets/img/avatar.png">
                     <span class="align-middle" th:text="${user.getUsername()}"></span>
 
                 </a>
@@ -78,6 +79,8 @@
                      class="dropdown-menu  dropdown-secondary">
                     <a class="dropdown-item" href="/login" th:if="${user.getUsername()}=='未登录'">登录</a>
                     <a class="dropdown-item" href="/logup" th:if="${user.getUsername()}=='未登录'">注册</a>
+
+                    <a class="dropdown-item" href="/userInfo" th:if="${user.getUsername()}!='未登录'">我</a>
                     <a class="dropdown-item" href="/logout" th:if="${user.getUsername()}!='未登录'">退出</a>
                 </div>
             </li>
