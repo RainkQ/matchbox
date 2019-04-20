@@ -7,7 +7,7 @@
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta content="ie=edge" http-equiv="x-ua-compatible">
     <!-- Font Awesome -->
-    <link href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.css" rel="stylesheet">
     <!-- Bootstrap core CSS -->
     <link href="assets/MDB/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
@@ -67,7 +67,8 @@
             <!--                    <i class="fas fa-envelope"></i>-->
             <!--                </a>-->
             <!--            </li>-->
-            <li class="nav-item avatar dropdown">
+            <li class="nav-item avatar dropdown"
+                th:class="${activeUrl=='userInfo'?'nav-item avatar dropdown active':'nav-item avatar dropdown'}">
                 <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
                    data-toggle="dropdown" id="userInfo">
                     <img alt="avatar image" class="rounded-circle z-depth-0"
@@ -158,6 +159,8 @@
     <script src="assets/MDB/js/bootstrap.min.js" type="text/javascript"></script>
     <!-- MDB core JavaScript -->
     <script src="assets/MDB/js/mdb.min.js" type="text/javascript"></script>
+    <script color="255,255,255" count="99" opacity='0.6' src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"
+            type="text/javascript" zIndex="-1"></script>
 </div>
 </body>
 </html>
