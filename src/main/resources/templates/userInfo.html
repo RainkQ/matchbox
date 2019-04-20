@@ -4,14 +4,64 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="components::head"></head>
 <body>
+<!--/*@thymesVar id="user" type="tk.tnicy.matchbox.domain.User"*/-->
 <header th:replace="components::navBar(userInfo,${user})"></header>
-<div class="container">
+<main>
+    <div class="container text-center">
 
 
-</div>
+        <!-- Card -->
+        <div class="card testimonial-card">
+
+            <!-- Background color -->
+            <div class="card-up aqua-gradient"></div>
+
+            <!-- Avatar -->
+            <div class="avatar mx-auto white">
+                <img alt="avatar" class="rounded-circle" src="assets/img/avatar.png">
+            </div>
+
+            <!-- Content -->
+            <div class="card-body">
+                <!-- Name -->
+                <h4 class="card-title"><strong th:text="${user.getUsername()}">用户名</strong></h4>
+                <!-- Subtitle -->
+                <h6 class="font-weight-bold indigo-text py-2"
+                    th:text="${user.getFeature().getGender()}==true?'小哥哥':'小姐姐'">性别</h6>
+                <hr>
+                <!-- Quotation -->
+                <p>
+                    <img src="assets/img/quote-left.svg" width="20">
+
+                    <span th:text="${user.getFeature().getSignature()}"></span>
+
+                    <img src="assets/img/quote-right.svg" width="20"></p>
+                <hr>
+
+                <button class="btn btn-rounded btn-sm aqua-gradient" th:each="tag : ${user.getFeature().getTags()}"
+                        th:text="tag.getLabel()">Aqua
+                </button>
+                <button class="btn btn-rounded btn-sm aqua-gradient" id="addTag_btn" onclick="addTag()"><img
+                        src="assets/img/plus.svg" width="20"></button>
+
+            </div>
+
+        </div>
+        <!-- Card -->
+
+
+    </div>
+
+
+</main>
 <footer th:replace="components::footBar"></footer>
 
-
 <div th:replace="components::js"></div>
+
+<script>
+    function addTag() {
+        $("#addTag_btn").html("")
+    }
+</script>
 </body>
 </html>

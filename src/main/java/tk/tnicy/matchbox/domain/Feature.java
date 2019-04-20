@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "feature")
@@ -18,6 +19,13 @@ public class Feature implements Serializable {
     )
     private Long id;
 
+
+    private Boolean gender; //性别 true = 男 false = 女
+
+    private String signature; //个性签名
+
+    @OneToMany(targetEntity = Tag.class, fetch = FetchType.EAGER)
+    private List<Tag> tags; //tags
 
 
 }
