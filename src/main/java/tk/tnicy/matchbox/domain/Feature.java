@@ -4,7 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "feature")
@@ -24,8 +25,23 @@ public class Feature implements Serializable {
 
     private String signature; //个性签名
 
-    @OneToMany(targetEntity = Tag.class, fetch = FetchType.EAGER)
-    private List<Tag> tags; //tags
+    @OneToMany(targetEntity = Tag.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Tag> tags; //tags
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Feature)) return false;
+        Feature feature = (Feature) o;
+        return Objects.equals(getId(), feature.getId()) &&
+                Objects.equals(getGender(), feature.getGender()) &&
+                Objects.equals(getSignature(), feature.getSignature()) &&
+                Objects.equals(getTags(), feature.getTags());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getGender(), getSignature(), getTags());
+    }
 }

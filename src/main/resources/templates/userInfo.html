@@ -38,11 +38,22 @@
                     <img src="assets/img/quote-right.svg" width="20"></p>
                 <hr>
 
-                <button class="btn btn-rounded btn-sm aqua-gradient" th:each="tag : ${user.getFeature().getTags()}"
-                        th:text="tag.getLabel()">Aqua
-                </button>
-                <button class="btn btn-rounded btn-sm aqua-gradient" id="addTag_btn" onclick="addTag()"><img
-                        src="assets/img/plus.svg" width="20"></button>
+                <div id="tags">
+
+                    <div class="btn-group" role="group" th:each="tag : ${user.getFeature().getTags()}">
+                        <button class="btn btn-rounded btn-sm aqua-gradient"
+                                th:text="${tag.getLabel()}">Aqua
+                        </button>
+                        <button class="btn btn-rounded btn-sm blue-gradient"
+                                th:onclick="deleteTag([[${tag.getId()}]],[[${tag.getLabel()}]])">
+                            &times;
+                        </button>
+                    </div>
+
+
+                    <button class="btn btn-rounded btn-sm aqua-gradient" id="addTag_btn" onclick="addTag()"><img
+                            src="assets/img/plus.svg" width="20"></button>
+                </div>
 
             </div>
 
@@ -60,8 +71,62 @@
 
 <script>
     function addTag() {
-        $("#addTag_btn").html("")
+        $("#addTag_btn").replaceWith(
+            "<!-- Material outline input -->\n" +
+            "<div class=\"md-form md-outline\">\n" +
+            "  <input type=\"text\" id=\"new_Tag\" class=\"form-control\">\n" +
+            "  <label for=\"form1\">New Tag</label>\n" +
+            "</div>"
+        );
+
+
     }
+
+    $("#tags").on("blur", "#new_Tag", function () {
+        if ($("#new_Tag").val() == '') {
+            return;
+        }
+        let jsonObj = {"label": $("#new_Tag").val()};
+        console.log(jsonObj);
+        $.ajax({
+            type: 'POST',
+            url: "/addTag",
+            dataType: "json",
+            data: JSON.stringify(jsonObj),
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data)
+            },
+            error: function () {
+                console.log("fucking error")
+            },
+            complete: function () {
+                $("#tags").load("http://101.132.120.236:49521/userInfo #tags");
+            }
+        });
+
+    });
+
+    function deleteTag(id, label) {
+        let jsonObj = {"id": id, "label": label};
+        $.ajax({
+            type: 'POST',
+            url: "/deleteTag",
+            dataType: "json",
+            data: JSON.stringify(jsonObj),
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data)
+            },
+            error: function () {
+                console.log("fucking error")
+            },
+            complete: function () {
+                $("#tags").load("http://101.132.120.236:49521/userInfo #tags");
+            }
+        });
+    }
+
 </script>
 </body>
 </html>

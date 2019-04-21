@@ -5,9 +5,7 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import tk.tnicy.matchbox.domain.Feature;
-import tk.tnicy.matchbox.domain.User;
-import tk.tnicy.matchbox.domain.UserRepository;
+import tk.tnicy.matchbox.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +15,9 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    TagRepository tagRepository;
 
 
     @Cacheable(value = "users", key = "#id", unless = "#result == null")
@@ -77,5 +78,24 @@ public class UserService {
 
     public void delete(User user) {
         userRepository.delete(user);
+    }
+
+
+    public Tag findTagByLabel(String label) {
+        return tagRepository.findByLabel(label);
+    }
+
+    public List<Tag> findAllTags() {
+        return tagRepository.findAll();
+    }
+
+
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
+
+
+    public User saveAndFlush(User user) {
+        return userRepository.saveAndFlush(user);
     }
 }

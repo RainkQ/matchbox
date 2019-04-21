@@ -12,12 +12,13 @@ import tk.tnicy.matchbox.domain.Feature;
 import tk.tnicy.matchbox.domain.User;
 import tk.tnicy.matchbox.service.UserService;
 
+
 public class Util {
 
 
-    public static Session injectUser(Model model) {
+    public static Session injectUser(UserService userService, Model model) {
         Subject subject = SecurityUtils.getSubject();
-        User user = (User) subject.getPrincipal();
+        User user = getCurrentUser(userService);
 
         if (user == null) {
             user = new User();
@@ -58,9 +59,15 @@ public class Util {
     }
 
 
-    public static User getCurrentUser() {
+    public static User getCurrentUser(UserService userService) {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
-        System.out.println("现在用户:" + user);
-        return user;
+        User fin_user;
+        if (user != null) {
+            fin_user = userService.findUserByUsername(user.getUsername());
+        } else {
+            fin_user = null;
+        }
+        System.out.println("现在用户:" + fin_user);
+        return fin_user;
     }
 }

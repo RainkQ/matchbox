@@ -32,7 +32,7 @@ public class LogController {
             return "redirect:/";
         }
 
-        Util.injectUser(model);
+        Util.injectUser(userService, model);
 
         return "login";
     }
@@ -40,7 +40,7 @@ public class LogController {
 
     @PostMapping("/login")
     public Object postLogin(HttpServletRequest request, String username, String password, Model model) {
-        Util.injectUser(model);
+        Util.injectUser(userService, model);
         if (Util.login(userService, username, password, model)) {
             SavedRequest savedRequest = WebUtils.getSavedRequest(request);
             if (savedRequest == null || savedRequest.getRequestUrl() == null) {
@@ -56,7 +56,7 @@ public class LogController {
 
     @GetMapping("/logup")
     public String getLogup(Model model) {
-        Util.injectUser(model);
+        Util.injectUser(userService, model);
         return "logup";
     }
 
@@ -65,7 +65,7 @@ public class LogController {
                             @RequestParam("password") String password,
                             Model model) {
 
-        Util.injectUser(model);
+        Util.injectUser(userService, model);
 
         boolean result = userService.registerUser(username, password);
         if (result) {
@@ -90,7 +90,7 @@ public class LogController {
     @RequestMapping("/deleteMe")
     public String getUserInfo() {
 
-        User user = Util.getCurrentUser();
+        User user = Util.getCurrentUser(userService);
         userService.delete(user);
         SecurityUtils.getSubject().logout();
         return "redirect:/login";

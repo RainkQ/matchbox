@@ -41,3 +41,4 @@ spring:
     redis:
       time-to-live: 600000
 
+

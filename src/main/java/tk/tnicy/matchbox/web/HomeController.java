@@ -16,9 +16,7 @@ public class HomeController {
     @GetMapping(value = {"/", "/index"})
     public String getIndex(Model model) {
 
-        Util.injectUser(model);
-
-        Util.getCurrentUser();
+        Util.injectUser(userService, model);
         return "index";
     }
 

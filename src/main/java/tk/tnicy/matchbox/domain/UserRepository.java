@@ -23,4 +23,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @CacheEvict(value = "users", key = "#user.getUsername()")
     void delete(User user);
+
+    @CachePut(value = "users", key = "#user.getUsername()", unless = "#result == null")
+    User saveAndFlush(User user);
+
 }
