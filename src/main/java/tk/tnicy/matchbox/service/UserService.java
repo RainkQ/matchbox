@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import tk.tnicy.matchbox.domain.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,6 +52,7 @@ public class UserService {
         user.setSalt(username);
         user.setPassword(newPs);
         user.setFeature(new Feature());
+        user.getFeature().setTags(new HashSet<>());
 
         // 看数据库中是否存在该账户
         User hadUser = userRepository.findUserByUsername(username);

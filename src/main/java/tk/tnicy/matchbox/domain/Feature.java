@@ -25,7 +25,7 @@ public class Feature implements Serializable {
 
     private String signature; //个性签名
 
-    @OneToMany(targetEntity = Tag.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity = Tag.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Tag> tags; //tags
 
 
