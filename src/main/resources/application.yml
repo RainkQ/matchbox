@@ -1,3 +1,9 @@
+qiniu:
+  accesskey: WQMytg9Nn2ictSU3o4_Lf3Z68lM0IWeUiT3QFTWE
+  secretKey: J0elk9usrfqYZeoFFGgGRgRUAwFhvd4fWn0oBidy
+  bucket: matchbox
+  path: http://pq5ucxgob.bkt.clouddn.com
+
 server:
   tomcat:
     uri-encoding: UTF-8
@@ -30,7 +36,7 @@ spring:
     database: 0
     host: 101.132.120.236
     port: 6379
-    password:
+    password: ",./,./"
 
 
   thymeleaf:
@@ -40,5 +46,7 @@ spring:
   cache:
     redis:
       time-to-live: 600000
+
+
 
 

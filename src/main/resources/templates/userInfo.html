@@ -26,16 +26,21 @@
                 <!-- Name -->
                 <h4 class="card-title"><strong th:text="${user.getUsername()}">用户名</strong></h4>
                 <!-- Subtitle -->
-                <h6 class="font-weight-bold indigo-text py-2"
-                    th:text="${user.getFeature().getGender()}==true?'小哥哥':'小姐姐'">性别</h6>
+                <div id="gender-div">
+                    <h6 class="font-weight-bold indigo-text py-2" id="gender" onclick="changeGender()"
+                        th:text="${user.getFeature().getGender()}==true?'小哥哥':'小姐姐'">性别
+                    </h6>
+                </div>
                 <hr>
                 <!-- Quotation -->
-                <p>
+                <p id="personalDescription">
                     <img src="assets/img/quote-left.svg" width="20">
 
-                    <span th:text="${user.getFeature().getSignature()}"></span>
+                    <span id="signature" onclick="changeSignature()"
+                          th:text="${user.getFeature().getSignature()}"></span>
 
-                    <img src="assets/img/quote-right.svg" width="20"></p>
+                    <img src="assets/img/quote-right.svg" width="20">
+                </p>
                 <hr>
 
                 <div id="tags">
@@ -69,7 +74,111 @@
 
 <div th:replace="components::js"></div>
 
+
+<script src="assets/js/SimpleAjaxUploader.js"></script>
 <script>
+
+
+    function changeGender() {
+        let o = $('#gender');
+        let originalGender = o.text();
+        let inputHtmlMale = "<div class=\"form-check form-check-inline\">\n" +
+            "  <input type=\"radio\" class=\"form-check-input\" id=\"male\" name=\"gender\" checked value=true>\n" +
+            "  <label class=\"form-check-label\" for=\"male\">小哥哥</label>\n" +
+            "</div>\n" +
+            "\n" +
+            "<!-- Material inline 2 -->\n" +
+            "<div class=\"form-check form-check-inline\">\n" +
+            "  <input type=\"radio\" class=\"form-check-input\" id=\"female\" name=\"gender\" value=false>\n" +
+            "  <label class=\"form-check-label\" for=\"female\">小姐姐</label>\n" +
+            "</div>";
+
+        let inputHtmlFemale = "<div class=\"form-check form-check-inline\">\n" +
+            "  <input type=\"radio\" class=\"form-check-input\" id=\"male\" name=\"gender\" value=true>\n" +
+            "  <label class=\"form-check-label\" for=\"male\">小哥哥</label>\n" +
+            "</div>\n" +
+            "\n" +
+            "<!-- Material inline 2 -->\n" +
+            "<div class=\"form-check form-check-inline\">\n" +
+            "  <input type=\"radio\" class=\"form-check-input\" id=\"female\" name=\"gender\" checked value=false>\n" +
+            "  <label class=\"form-check-label\" for=\"female\">小姐姐</label>\n" +
+            "</div>";
+
+
+        let inputHtml;
+        if (originalGender === "小哥哥") {
+            inputHtml = inputHtmlMale;
+        } else {
+            inputHtml = inputHtmlFemale;
+        }
+        o.replaceWith(inputHtml);
+        $("#gender-div").append("<button type=\"button\" class=\"btn btn-rounded btn-sm peach-gradient\" onclick='uploadGender()'>确认修改</button>")
+    }
+
+
+    function uploadGender() {
+        let jsonObj = {"gender": $("input[name='gender']:checked").val()};  //true是男 false是女
+        $.ajax({
+            type: 'POST',
+            url: "/editGender",
+            dataType: "json",
+            data: JSON.stringify(jsonObj),
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data)
+            },
+            error: function () {
+                console.log("fucking error")
+            },
+            complete: function () {
+                $("#gender-div").load("http://101.132.120.236:49521/userInfo #gender-div");
+            }
+        });
+
+    }
+
+
+    function changeSignature() {
+        let o = $('#signature');
+        let originalSig = o.text();
+
+        let inputHtml = "<div class=\"md-form md-outline\">\n" +
+            "  <input type=\"text\" id=\"signature\" class=\"form-control\" value='" + originalSig + "'>\n" +
+            "  <label for=\"form1\">Signature</label>\n" +
+            "</div>";
+        o.replaceWith(inputHtml);
+    }
+
+    $("#personalDescription").on("blur", "#signature", function () {
+        if ($("#signature").val() === '') {
+            return;
+        }
+        let jsonObj = {"signature": $("#signature").val()};
+        console.log(jsonObj);
+        $.ajax({
+            type: 'POST',
+            url: "/addSignature",
+            dataType: "json",
+            data: JSON.stringify(jsonObj),
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data)
+            },
+            error: function () {
+                console.log("fucking error")
+            },
+            complete: function () {
+                $("#personalDescription").load("http://101.132.120.236:49521/userInfo #personalDescription");
+            }
+        });
+
+    });
+
+
+
+
+
+
     function addTag() {
         $("#addTag_btn").replaceWith(
             "<!-- Material outline input -->\n" +
@@ -83,7 +192,7 @@
     }
 
     $("#tags").on("blur", "#new_Tag", function () {
-        if ($("#new_Tag").val() == '') {
+        if ($("#new_Tag").val() === '') {
             return;
         }
         let jsonObj = {"label": $("#new_Tag").val()};
@@ -126,6 +235,7 @@
             }
         });
     }
+
 
 </script>
 </body>

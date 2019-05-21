@@ -67,7 +67,7 @@ public class Util {
         } else {
             fin_user = null;
         }
-        System.out.println("现在用户:" + fin_user);
+//        System.out.println("现在用户:" + fin_user);
         return fin_user;
     }
 }

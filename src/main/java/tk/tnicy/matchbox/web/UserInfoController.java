@@ -2,6 +2,7 @@ package tk.tnicy.matchbox.web;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import tk.tnicy.matchbox.domain.Feature;
 import tk.tnicy.matchbox.domain.Tag;
 import tk.tnicy.matchbox.domain.User;
 import tk.tnicy.matchbox.service.UserService;
@@ -39,7 +41,7 @@ public class UserInfoController {
     @RequiresPermissions("normal")
     @PostMapping("/addTag")
     @ResponseBody
-    public String addTag(@RequestBody Tag tag) {
+    public ResponseEntity addTag(@RequestBody Tag tag) {
 
         User user = Util.getCurrentUser(userService);
 
@@ -52,14 +54,14 @@ public class UserInfoController {
         userService.saveAndFlush(user);
 
 
-        return "ok";
+        return ResponseEntity.ok(tag);
     }
 
     @Transactional
     @RequiresPermissions("normal")
     @PostMapping("/deleteTag")
     @ResponseBody
-    public String deleteTag(@RequestBody Tag tag) {
+    public ResponseEntity deleteTag(@RequestBody Tag tag) {
 
         User user = Util.getCurrentUser(userService);
 
@@ -72,6 +74,33 @@ public class UserInfoController {
         userService.saveAndFlush(user);
 
 
-        return "ok";
+        return ResponseEntity.ok(tag);
     }
+
+
+    //    修改个签
+    @PostMapping("/addSignature")
+    public ResponseEntity addSignature(@RequestBody Feature feature) {
+        User user = Util.getCurrentUser(userService);
+//        System.out.println(feature);
+        System.out.println(feature.getSignature());
+        user.getFeature().setSignature(feature.getSignature());
+        userService.saveAndFlush(user);
+
+        return ResponseEntity.ok(feature.getSignature());
+    }
+
+    //  修改性别
+    @PostMapping("/editGender")
+    public ResponseEntity editGender(@RequestBody Feature feature) {
+
+        User user = Util.getCurrentUser(userService);
+
+        System.out.println(feature.getGender());
+        user.getFeature().setGender(feature.getGender());
+        userService.saveAndFlush(user);
+        return ResponseEntity.ok(feature.getGender());
+    }
+
+
 }
