@@ -95,7 +95,7 @@
 <footer class="page-footer font-small special-color-dark pt-4" th:fragment="footBar">
 
     <!-- Footer Elements -->
-    <div class="container">
+    <div class="container" id="bottom-div">
 
         <!-- Social buttons -->
         <!--            <ul class="list-unstyled list-inline text-center">-->
@@ -125,10 +125,7 @@
         <!--                    </a>-->
         <!--                </li>-->
         <!--            </ul>-->
-        <div class="alert alert-block  fade show" id="warning-block" style="display: none">
-            <button class="close text-white" data-dismiss="alert" type="button">&times;</button>
-            <h4>♥ 感谢产品经理仙儿!</h4>muuuuuuuuua👄
-        </div>
+
         <!-- Social buttons -->
 
     </div>
@@ -138,8 +135,39 @@
     <div class="footer-copyright text-center py-3">© 2019 Copyright:
         <a onclick="f()"> MatchBox.com</a>
         <script>
+
+            let strings = [];
+            strings[0] = "<h4>♥ 感谢产品经理仙儿!</h4>muuuuuuuuua👄";
+            strings[1] = "<h4>99夫妇🔒了  🔑吞了</h4>";
+            strings[2] = "<h4>张杰易烊千玺孟美岐李汶翰</h4>";
+            strings[3] = "<h4>全世界最好的201🔒</h4>";
+
             function f() {
-                $("#warning-block").show();
+
+                let i = randomNum(0, strings.length);
+
+                console.log(i);
+                if (i === 0) {
+                    const time1 = new Date();
+                    const time2 = new Date("2017/9/9 0:00:00");
+                    const days = Math.floor((time1.getTime() - time2.getTime()) / 86400000);
+                    const hours = Math.floor(((time1.getTime() - time2.getTime()) % 86400000) / 3600000);
+                    const minutes = Math.floor(((time1.getTime() - time2.getTime()) % 3600000) / 60000);
+                    const seconds = Math.floor(((time1.getTime() - time2.getTime()) % 60000) / 1000);
+                    const miliseconds = (time1.getTime() - time2.getTime()) % 1000;
+
+                    $("#bottom-div").append("<div class=\"alert alert-block  fade show\" id=\"warning-block\" >\n" +
+                        "            <button class=\"close text-white\" data-dismiss=\"alert\" type=\"button\">&times;</button>\n" +
+                        "            " + "♥这是我们在一起的第" + days + "天" + hours + "小时" + minutes + "分钟" + seconds + "秒" + miliseconds + "毫秒" + "\n" +
+                        "        </div>");
+                    return;
+                }
+
+
+                $("#bottom-div").append("<div class=\"alert alert-block  fade show\" id=\"warning-block\" >\n" +
+                    "            <button class=\"close text-white\" data-dismiss=\"alert\" type=\"button\">&times;</button>\n" +
+                    "            " + strings[i - 1] + "\n" +
+                    "        </div>");
             }
         </script>
     </div>

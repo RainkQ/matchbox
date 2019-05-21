@@ -36,8 +36,8 @@
                 <p id="personalDescription">
                     <img src="assets/img/quote-left.svg" width="20">
 
-                    <span id="signature" onclick="changeSignature()"
-                          th:text="${user.getFeature().getSignature()}"></span>
+                    <span id="signature" onclick="changeSignature()" style="white-space:pre"
+                          th:text="${user.getFeature().getSignature()!=null?user.getFeature().getSignature():'还没有写个性签名呢！'}"></span>
 
                     <img src="assets/img/quote-right.svg" width="20">
                 </p>
