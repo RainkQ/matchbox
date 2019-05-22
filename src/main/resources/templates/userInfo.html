@@ -17,7 +17,7 @@
             <div class="card-up aqua-gradient"></div>
 
             <!-- Avatar -->
-            <div class="avatar mx-auto white">
+            <div class="avatar mx-auto white" onclick="callAddAvatarWin()">
                 <img alt="avatar" class="rounded-circle" src="assets/img/avatar.png">
             </div>
 
@@ -65,6 +65,70 @@
         </div>
         <!-- Card -->
 
+        <!--AvatarUpload-->
+        <button class="btn btn-primary" data-target="#avatarUploadWin" data-toggle="modal" id="hiddenTrigger"
+                style="display: none" type="button">
+        </button>
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="avatarUploadWin"
+             role="dialog"
+             tabindex="-1">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <!--Title-->
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">头像上传</h5>
+                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <!--Body-->
+                    <div class="modal-body">
+                        <form class="md-form">
+                            <div class="file-field">
+                                <!--AvatarPreview-->
+                                <div class="mb-4" id="avatarPre" style="display: block">
+                                    <img alt="example placeholder avatar"
+                                         class="rounded-circle z-depth-1-half avatar-pic"
+                                         id="preview"
+                                         src="assets/img/avatar.png">
+                                </div>
+                                <!--ImageBox-->
+                                <div id="imageBoxDiv" style="display: none">
+                                    <div class="imageBox">
+                                        <div class="thumbBox"></div>
+                                        <div class="spinner" style="display: none">Loading...</div>
+                                    </div>
+                                    <div class="action">
+                                        <button class="btn btn-action" id="btnCrop"
+                                                style="float: right" type="button">裁剪
+                                        </button>
+                                        <button class="btn btn-action" id="btnZoomIn"
+                                                style="float: right" type="button">+
+                                        </button>
+                                        <button class="btn btn-action" id="btnZoomOut"
+                                                style="float: right" type="button">-
+                                        </button>
+                                    </div>
+                                </div>
+                                <!--ChooseFile-->
+                                <div class="d-flex justify-content-center">
+                                    <div class="btn btn-mdb-color btn-rounded float-left">
+                                        <span>选择图像</span>
+                                        <input id="file" type="file">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!--Footer-->
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-dismiss="modal" type="button">取消</button>
+                        <button class="btn btn-primary" type="button">上传</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
     </div>
 
@@ -76,6 +140,7 @@
 
 
 <script src="assets/js/SimpleAjaxUploader.js"></script>
+<script src="assets/js/require.js"></script>
 <script>
 
 
@@ -175,10 +240,6 @@
     });
 
 
-
-
-
-
     function addTag() {
         $("#addTag_btn").replaceWith(
             "<!-- Material outline input -->\n" +
@@ -236,6 +297,53 @@
         });
     }
 
+
+    function callAddAvatarWin() {
+        document.getElementById('hiddenTrigger').click();
+    }
+
+
+    require.config({
+        baseUrl: "assets/js/",
+        paths: {
+            jquery: 'jquery-1.11.1.min',
+            cropbox: 'cropbox'
+        }
+    });
+    require(["jquery", "cropbox"], function ($) {
+            var options =
+                {
+                    thumbBox: '.thumbBox',
+                    spinner: '.spinner',
+                    imgSrc: 'avatar.png'
+                };
+            var cropper = $('.imageBox').cropbox(options);
+            $('#file').on('change', function () {
+                $('#avatarPre').hide();
+                $('#imageBoxDiv').show();
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    options.imgSrc = e.target.result;
+                    cropper = $('.imageBox').cropbox(options);
+                };
+                reader.readAsDataURL(this.files[0]);
+                this.files = [];
+
+            });
+            $('#btnCrop').on('click', function () {
+                var img = cropper.getDataURL();
+                $('#preview').attr('src', img);
+                $('#avatarPre').show();
+                $('#imageBoxDiv').hide();
+            });
+            $('#btnZoomIn').on('click', function () {
+                cropper.zoomIn();
+            });
+            $('#btnZoomOut').on('click', function () {
+                cropper.zoomOut();
+            })
+        }
+    );
 
 </script>
 </body>
