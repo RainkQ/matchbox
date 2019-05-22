@@ -20,8 +20,11 @@ public class Feature implements Serializable {
     )
     private Long id;
 
+    private String avatarUUID;
+
 
     private Boolean gender; //性别 true = 男 false = 女
+
 
     private String signature; //个性签名
 

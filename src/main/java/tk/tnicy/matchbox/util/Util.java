@@ -12,6 +12,8 @@ import tk.tnicy.matchbox.domain.Feature;
 import tk.tnicy.matchbox.domain.User;
 import tk.tnicy.matchbox.service.UserService;
 
+import java.nio.ByteBuffer;
+
 
 public class Util {
 
@@ -70,4 +72,24 @@ public class Util {
 //        System.out.println("现在用户:" + fin_user);
         return fin_user;
     }
+
+
+    public static Long decodeStirngToLong(String s) {
+        ByteBuffer buffer = ByteBuffer.allocate(8);
+
+        byte[] bytes = s.getBytes();
+        buffer.put(bytes, 0, bytes.length);
+        buffer.flip();//need flip
+        return buffer.getLong();
+    }
+
+    public static String decodeLongToString(long x) {
+        ByteBuffer buffer = ByteBuffer.allocate(8);
+        buffer.putLong(0, x);
+        return new String(buffer.array());
+    }
+
+
+
+
 }

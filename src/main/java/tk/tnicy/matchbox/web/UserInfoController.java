@@ -6,22 +6,30 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tk.tnicy.matchbox.domain.Feature;
 import tk.tnicy.matchbox.domain.Tag;
 import tk.tnicy.matchbox.domain.User;
+import tk.tnicy.matchbox.service.QiniuUploadFileService;
 import tk.tnicy.matchbox.service.UserService;
 import tk.tnicy.matchbox.util.Util;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Objects;
+import java.util.UUID;
+
 
 @Controller
 public class UserInfoController {
     @Autowired
     UserService userService;
+
+    @Autowired
+    QiniuUploadFileService qiniuUploadFileService;
+
 
     @Transactional
     @RequiresPermissions("normal")
@@ -100,6 +108,41 @@ public class UserInfoController {
         user.getFeature().setGender(feature.getGender());
         userService.saveAndFlush(user);
         return ResponseEntity.ok(feature.getGender());
+    }
+
+    @ResponseBody
+    @PostMapping("/changeAvatar")
+    public String changeAvatar(@RequestParam(value = "files", required = false) MultipartFile multipartFile) throws IOException {
+
+        if (multipartFile != null) {
+            long size = multipartFile.getSize();
+            if (size > 5242880) {//文件设置大小，我这里设置5M。
+                return "文件过大";
+            }
+
+
+            User user = Util.getCurrentUser(userService);
+
+            InputStream image = multipartFile.getInputStream();
+
+            String oldUuid = user.getFeature().getAvatarUUID();
+
+            qiniuUploadFileService.deleteImg(oldUuid);//删除老的uuid对应的图片
+
+            String uuid = UUID.randomUUID().toString();//新uuid
+
+            user.getFeature().setAvatarUUID(uuid);
+
+            userService.saveAndFlush(user);
+
+            String url = qiniuUploadFileService.uploadImg((FileInputStream) image, uuid);
+
+            System.out.println(url);
+            return url;
+        }
+
+        System.out.println("empty");
+        return "empty";
     }
 
 

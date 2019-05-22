@@ -2,7 +2,7 @@ qiniu:
   accesskey: WQMytg9Nn2ictSU3o4_Lf3Z68lM0IWeUiT3QFTWE
   secretKey: J0elk9usrfqYZeoFFGgGRgRUAwFhvd4fWn0oBidy
   bucket: matchbox
-  path: http://pq5ucxgob.bkt.clouddn.com
+  path: http://prv0aejgs.bkt.clouddn.com
 
 server:
   tomcat:

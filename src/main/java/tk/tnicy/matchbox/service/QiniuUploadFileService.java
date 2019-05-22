@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
 import com.qiniu.http.Response;
+import com.qiniu.storage.BucketManager;
 import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
@@ -22,7 +23,7 @@ public class QiniuUploadFileService {
     /**
      * 将图片上传到七牛云
      */
-    private String uploadQNImg(FileInputStream file, String key) {
+    public String uploadImg(FileInputStream file, String key) {
         // 构造一个带指定Zone对象的配置类
         Configuration cfg = new Configuration(Zone.zone0());
         // 其他参数参考类注释
@@ -52,6 +53,23 @@ public class QiniuUploadFileService {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public String deleteImg(String key) {
+        Auth auth = Auth.create(qiniuConstant.getAccessKey(), qiniuConstant.getSecretKey());
+        // 构造一个带指定Zone对象的配置类
+        Configuration cfg = new Configuration(Zone.zone0());
+        // 其他参数参考类注释
+        BucketManager bucketMgr = new BucketManager(auth, cfg);
+
+        //指定需要删除的文件，和文件所在的存储空间
+        String bucketName = qiniuConstant.getBucket();
+        try {
+            bucketMgr.delete(bucketName, key);//当前为7.2.1；  7.2.2后才能传多个key ，即：第二个参数为数组 (String... deleteTargets)
+        } catch (QiniuException e) {
+            e.printStackTrace();
+        }
+        return "done";
     }
 
 

@@ -17,8 +17,14 @@
             <div class="card-up aqua-gradient"></div>
 
             <!-- Avatar -->
-            <div class="avatar mx-auto white" onclick="callAddAvatarWin()">
-                <img alt="avatar" class="rounded-circle" src="assets/img/avatar.png">
+            <div class="avatar mx-auto white">
+                <img alt="avatar" class="rounded-circle" id="avatar"
+                     th:src="user.getFeature().getAvatarUUID()!=null? ${'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID()} : 'assets/img/avatar.png'">
+            </div>
+            <div class="text-center">
+                <a class="btn btn-default btn-rounded" data-target="#modalLoginAvatar" data-toggle="modal" href="">
+                    更换头像
+                </a>
             </div>
 
             <!-- Content -->
@@ -65,69 +71,40 @@
         </div>
         <!-- Card -->
 
-        <!--AvatarUpload-->
-        <button class="btn btn-primary" data-target="#avatarUploadWin" data-toggle="modal" id="hiddenTrigger"
-                style="display: none" type="button">
-        </button>
-        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="avatarUploadWin"
-             role="dialog"
+        <!--Modal: modal with Avatar Form-->
+        <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modalLoginAvatar" role="dialog"
              tabindex="-1">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog cascading-modal modal-avatar modal-sm" role="document">
+                <!--Content-->
                 <div class="modal-content">
-                    <!--Title-->
+
+                    <!--Header-->
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">头像上传</h5>
-                        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <img alt="avatar"
+                             class="rounded-circle img-responsive" id="preview-avatar"
+                             th:src="user.getFeature().getAvatarUUID()!=null? ${'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID()} : 'assets/img/avatar.png'">
                     </div>
                     <!--Body-->
-                    <div class="modal-body">
-                        <form class="md-form">
-                            <div class="file-field">
-                                <!--AvatarPreview-->
-                                <div class="mb-4" id="avatarPre" style="display: block">
-                                    <img alt="example placeholder avatar"
-                                         class="rounded-circle z-depth-1-half avatar-pic"
-                                         id="preview"
-                                         src="assets/img/avatar.png">
-                                </div>
-                                <!--ImageBox-->
-                                <div id="imageBoxDiv" style="display: none">
-                                    <div class="imageBox">
-                                        <div class="thumbBox"></div>
-                                        <div class="spinner" style="display: none">Loading...</div>
-                                    </div>
-                                    <div class="action">
-                                        <button class="btn btn-action" id="btnCrop"
-                                                style="float: right" type="button">裁剪
-                                        </button>
-                                        <button class="btn btn-action" id="btnZoomIn"
-                                                style="float: right" type="button">+
-                                        </button>
-                                        <button class="btn btn-action" id="btnZoomOut"
-                                                style="float: right" type="button">-
-                                        </button>
-                                    </div>
-                                </div>
-                                <!--ChooseFile-->
-                                <div class="d-flex justify-content-center">
-                                    <div class="btn btn-mdb-color btn-rounded float-left">
-                                        <span>选择图像</span>
-                                        <input id="file" type="file">
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="modal-body text-center mb-1">
+
+                        <label class="btn btn-rounded blue-gradient" for="avatar-file">
+                            选择图片
+                        </label>
+                        <input id="avatar-file" onchange="changeAvatar(this)" style="display: none" type="file"/>
+
+
+                        <div class="text-center mt-4">
+                            <button class="btn btn-rounded btn-lg aqua-gradient" onclick="uploadAvatar()">确定上传</button>
+                        </div>
+
                     </div>
-                    <!--Footer-->
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" data-dismiss="modal" type="button">取消</button>
-                        <button class="btn btn-primary" type="button">上传</button>
-                    </div>
+
                 </div>
+                <!--/.Content-->
             </div>
         </div>
+        <!--Modal: Login with Avatar Form-->
+
 
 
     </div>
@@ -139,8 +116,7 @@
 <div th:replace="components::js"></div>
 
 
-<script src="assets/js/SimpleAjaxUploader.js"></script>
-<script src="assets/js/require.js"></script>
+
 <script>
 
 
@@ -298,52 +274,45 @@
     }
 
 
-    function callAddAvatarWin() {
-        document.getElementById('hiddenTrigger').click();
+    function changeAvatar(source) {
+        let file = source.files[0];
+        if (window.FileReader) {
+            let fr = new FileReader();
+            fr.onloadend = function (e) {
+                $("#preview-avatar").attr("src", e.target.result);
+            };
+            fr.readAsDataURL(file);
+        }
+
+
     }
 
+    function uploadAvatar() {
+        let formData = new FormData();
+        formData.append("files", $("#avatar-file")[0].files[0]);
 
-    require.config({
-        baseUrl: "assets/js/",
-        paths: {
-            jquery: 'jquery-1.11.1.min',
-            cropbox: 'cropbox'
-        }
-    });
-    require(["jquery", "cropbox"], function ($) {
-            var options =
-                {
-                    thumbBox: '.thumbBox',
-                    spinner: '.spinner',
-                    imgSrc: 'avatar.png'
-                };
-            var cropper = $('.imageBox').cropbox(options);
-            $('#file').on('change', function () {
-                $('#avatarPre').hide();
-                $('#imageBoxDiv').show();
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    options.imgSrc = e.target.result;
-                    cropper = $('.imageBox').cropbox(options);
-                };
-                reader.readAsDataURL(this.files[0]);
-                this.files = [];
 
-            });
-            $('#btnCrop').on('click', function () {
-                var img = cropper.getDataURL();
-                $('#preview').attr('src', img);
-                $('#avatarPre').show();
-                $('#imageBoxDiv').hide();
-            });
-            $('#btnZoomIn').on('click', function () {
-                cropper.zoomIn();
-            });
-            $('#btnZoomOut').on('click', function () {
-                cropper.zoomOut();
-            })
-        }
-    );
+        $.ajax({
+            type: 'POST',
+            url: "/changeAvatar",
+            data: formData,
+            contentType: false,
+            processData: false,//这个很有必要，不然不行
+            // dataType:"json",
+            async: true,
+            mimeType: "multipart/form-data",
+            success: function (data) {
+                console.log(data)
+            },
+            error: function () {
+                console.log("fucking error")
+            },
+            complete: function () {
+                $("#avatar").load("http://101.132.120.236:49521/userInfo #avatar");
+            }
+        });
+    }
+
 
 </script>
 </body>
