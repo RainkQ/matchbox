@@ -27,14 +27,14 @@ spring:
         enable_lazy_load_no_trans: true
     open-in-view: true
   datasource:
-    url: jdbc:postgresql://101.132.120.236:5432/matchbox?useSSl=false&useunicode=true&characterEncoding=utf8
+    url: jdbc:postgresql://tnicy.tk:5432/matchbox?useSSl=false&useunicode=true&characterEncoding=utf8
     driver-class-name: org.postgresql.Driver
     username: "postgres"
     password: "postgres"
 
   redis:
     database: 0
-    host: 101.132.120.236
+    host: tnicy.tk
     port: 6379
     password: ",./,./"
 
