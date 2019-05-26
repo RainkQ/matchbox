@@ -32,6 +32,11 @@ public class Feature implements Serializable {
     private Set<Tag> tags; //tags
 
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "avatar_id")
+    private Avatar avatar;
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
