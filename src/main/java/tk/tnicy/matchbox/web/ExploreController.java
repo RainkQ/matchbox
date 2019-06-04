@@ -24,7 +24,7 @@ public class ExploreController {
 
 
     @RequiresPermissions("normal")
-    @GetMapping("/explore/{page}")
+    @GetMapping({"/explore", "/explore/{page}"})
     public String getChat(Model model, @PathVariable(value = "page", required = false) Integer page) {
         Util.injectUser(userService, model);
 

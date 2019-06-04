@@ -87,6 +87,7 @@ public class UserInfoController {
 
 
     //    修改个签
+    @RequiresPermissions("normal")
     @PostMapping("/addSignature")
     public ResponseEntity addSignature(@RequestBody Feature feature) {
         User user = Util.getCurrentUser(userService);
@@ -99,6 +100,7 @@ public class UserInfoController {
     }
 
     //  修改性别
+    @RequiresPermissions("normal")
     @PostMapping("/editGender")
     public ResponseEntity editGender(@RequestBody Feature feature) {
 
@@ -111,6 +113,7 @@ public class UserInfoController {
     }
 
     @ResponseBody
+    @RequiresPermissions("normal")
     @PostMapping("/changeAvatar")
     public String changeAvatar(@RequestParam(value = "files", required = false) MultipartFile multipartFile) throws IOException {
 

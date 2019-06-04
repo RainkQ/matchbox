@@ -25,7 +25,7 @@ public class PostService {
 //    @Cacheable(value = "posts", key = "#me+#page+#size+#sort", unless = "#result == null")
     public List<Post> getMyFollowPosts(Feature me, int page, int size, Sort sort) {
         PageRequest pr = new PageRequest(page, size, sort);
-        return postRepository.findAllByAuthorIn(me.getFollows(), pr).getContent();
+        return postRepository.findAllByAuthorInAndTypeGreaterThan(me.getFollows(), 0, pr).getContent();
     }
 
 
@@ -45,6 +45,12 @@ public class PostService {
     public List<Post> getAllPosts(int page, int size, Sort sort) {
         PageRequest pr = new PageRequest(page, size, sort);
         return postRepository.findAll(pr).getContent();
+    }
+
+
+    public List<Post> getAllPostsBytype(Integer type, int page, int size, Sort sort) {
+        PageRequest pr = new PageRequest(page, size, sort);
+        return postRepository.findAllByType(type, pr).getContent();
     }
 
 

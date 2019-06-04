@@ -27,6 +27,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findAll(Pageable pageable);
 
+    Page<Post> findAllByAuthorInAndTypeGreaterThan(Collection<Feature> authors, Integer type, Pageable pageable);
+
+    Page<Post> findAllByAuthorAndTypeGreaterThan(Feature authors, Integer type, Pageable pageable);
+
+    Page<Post> findAllByType(Integer type, Pageable pageable);
+
     Post save(Post post);
 
     Post saveAndFlush(Post post);
