@@ -3,6 +3,8 @@ package tk.tnicy.matchbox.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,7 +30,8 @@ public class User implements Serializable {
     private String password;
     private String salt;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "feature_id")
     private Feature feature;
 

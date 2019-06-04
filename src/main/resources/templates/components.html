@@ -9,13 +9,13 @@
     <!-- Font Awesome -->
     <link href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
     <!-- Bootstrap core CSS -->
-    <link href="assets/MDB/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/assets/MDB/css/bootstrap.min.css" rel="stylesheet">
     <!-- Material Design Bootstrap -->
-    <link href="assets/MDB/css/mdb.min.css" rel="stylesheet">
+    <link href="../static/assets/MDB/css/mdb.min.css" rel="stylesheet">
     <!-- Your custom styles (optional) -->
-    <link href="assets/MDB/css/style.css" rel="stylesheet">
+    <link href="../static/assets/MDB/css/style.css" rel="stylesheet">
     <!--    my css-->
-    <link href="assets/css/theme.css" rel="stylesheet">
+    <link href="../static/assets/css/theme.css" rel="stylesheet">
 </head>
 <body>
 
@@ -25,7 +25,7 @@
 <nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color lighten-1" th:fragment="navBar(activeUrl,user)">
     <a class="navbar-brand" href="/">
         <img alt="mdb logo" class="d-inline-block align-top"
-             src="/assets/img/logo.svg"> MatchBox
+             src="../static/assets/img/logo.svg"> MatchBox
     </a>
     <button aria-controls="mobielDropdown" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
             data-target="#mobielDropdown" data-toggle="collapse" type="button">
@@ -40,7 +40,7 @@
             </li>
             <li class="nav-item"
                 th:class="${activeUrl=='explore'?'nav-item active':'nav-item'}">
-                <a class="nav-link" href="/explore">探索广场
+                <a class="nav-link" href="/explore/0">探索广场
                 </a>
             </li>
             <li class="nav-item"
@@ -72,7 +72,7 @@
                 <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
                    data-toggle="dropdown" id="userInfo">
                     <img alt="avatar image" class="rounded-circle z-depth-0"
-                         src="/assets/img/avatar.png">
+                         th:src="${user.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID() : '../static/assets/img/avatar.png'}">
                     <span class="align-middle" th:text="${user.getUsername()}"></span>
 
                 </a>
@@ -180,17 +180,72 @@
 <div th:fragment="js">
     <!-- SCRIPTS -->
     <!-- JQuery -->
-    <script src="assets/MDB/js/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <script src="../static/assets/MDB/js/jquery-3.3.1.min.js" type="text/javascript"></script>
     <!-- Bootstrap tooltips -->
-    <script src="assets/MDB/js/popper.min.js" type="text/javascript"></script>
+    <script src="../static/assets/MDB/js/popper.min.js" type="text/javascript"></script>
     <!-- Bootstrap core JavaScript -->
-    <script src="assets/MDB/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../static/assets/MDB/js/bootstrap.min.js" type="text/javascript"></script>
     <!-- MDB core JavaScript -->
-    <script src="assets/MDB/js/mdb.min.js" type="text/javascript"></script>
+    <script src="../static/assets/MDB/js/mdb.min.js" type="text/javascript"></script>
     <script color="255,255,255" count="99" opacity='0.6' src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"
             type="text/javascript" zIndex="-1"></script>
 
-    <script src="assets/js/util.js"></script>
+    <script src="../static/assets/js/util.js"></script>
 </div>
+
+
+<!--/*@thymesVar id="postContent" type="tk.tnicy.matchbox.domain.Post"*/-->
+<div th:fragment="post(postContent)" th:id="'post-'+${postContent.getId().toString()}">
+
+    <!-- Card -->
+    <div class="card testimonial-card " th:with="feature = ${postContent.getAuthor()}">
+
+        <!-- Background color -->
+        <div class="card-up aqua-gradient" style="height: 40px"></div>
+
+        <!-- Avatar -->
+        <div class="avatar mx-auto aqua-gradient" style="height: 60px; width: 60px; margin-top: -30px; border: 0;">
+            <img class="rounded-circle img-responsive"
+                 th:src="${feature.getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+feature.getAvatarUUID() : '../static/assets/img/avatar.png'}">
+
+        </div>
+
+        <!-- Content -->
+        <div class="card-body " style="padding-top: 0.5rem; padding-bottom: 0.5px;">
+            <!-- Name -->
+            <h5 class="card-title" th:text="${feature.getUser().getUsername()}">Martha Smith</h5>
+            <hr style="margin: 5px">
+            <!-- Quotation -->
+            <p th:text="${postContent.getContent()}"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos,
+                adipisci</p>
+        </div>
+
+    </div>
+    <!-- Card -->
+
+</div>
+
+
+<nav th:fragment="pagination(url,page)">
+    <!--/*@thymesVar id="url" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="page" type="java.lang.Integer"*/-->
+
+    <div class="light-blue lighten-5 pagination pg-blue justify-content-center">
+        <div class="page-item" th:class="${page} == 0 ? 'page-item disabled' : 'page-item'">
+            <a aria-label="Previous" class="page-link" th:href="'/'+${url}+'/'+${page - 1} ">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </div>
+        <div class="page-item active">
+            <a class="page-link" th:text="${page}">1</a></div>
+        <div class="page-item">
+            <a aria-label="Next" class="page-link" th:href="'/'+${url}+'/'+${page + 1}">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+
 </body>
 </html>

@@ -1,10 +1,12 @@
 package tk.tnicy.matchbox.domain;
 
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -20,6 +22,11 @@ public class Feature implements Serializable {
     )
     private Long id;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "feature")
+    private User user;
+
+
     private String avatarUUID;
 
 
@@ -28,28 +35,34 @@ public class Feature implements Serializable {
 
     private String signature; //个性签名
 
-    @ManyToMany(targetEntity = Tag.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(targetEntity = Tag.class, cascade = CascadeType.ALL)
     private Set<Tag> tags; //tags
 
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "avatar_id")
     private Avatar avatar;
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Feature)) return false;
-        Feature feature = (Feature) o;
-        return Objects.equals(getId(), feature.getId()) &&
-                Objects.equals(getGender(), feature.getGender()) &&
-                Objects.equals(getSignature(), feature.getSignature()) &&
-                Objects.equals(getTags(), feature.getTags());
-    }
+//    里程碑
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getGender(), getSignature(), getTags());
-    }
+    //    message
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sender")
+    private List<Message> sentMessages;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver")
+    private List<Message> receivedMessages;
+
+    //      关注的人
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(targetEntity = Feature.class, cascade = CascadeType.ALL)
+    private List<Feature> follows;
+
+    //    发的动态
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
+    private List<Post> posts;
+
 }

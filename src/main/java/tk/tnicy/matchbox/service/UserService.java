@@ -5,6 +5,7 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.tnicy.matchbox.domain.*;
 
 import java.util.ArrayList;
@@ -69,24 +70,27 @@ public class UserService {
         return userRepository.findAll();
     }
 
-
+    @Transactional
     public User findUserByUsername(String username) {
         return userRepository.findUserByUsername(username);
     }
 
+    @Transactional
     public User save(User user) {
         return userRepository.save(user);
     }
 
+    @Transactional
     public void delete(User user) {
         userRepository.delete(user);
     }
 
-
+    @Transactional
     public Tag findTagByLabel(String label) {
         return tagRepository.findByLabel(label);
     }
 
+    @Transactional
     public List<Tag> findAllTags() {
         return tagRepository.findAll();
     }
@@ -96,7 +100,7 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-
+    @Transactional
     public User saveAndFlush(User user) {
         return userRepository.saveAndFlush(user);
     }

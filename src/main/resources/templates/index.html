@@ -3,14 +3,33 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="components::head"></head>
+<style>
+    .card-columns {
+
+    @include media-breakpoint-only(lg) {
+        column-count: 4;
+    }
+    @include media-breakpoint-only(xl) {
+        column-count: 5;
+    }
+    }
+</style>
 <body>
 <header th:replace="components::navBar(index,${user})"></header>
 <div class="container">
+    <div class="card-columns" id="posts">
+        <!--/*@thymesVar id="posts" type="java.util.ArrayList<tk.tnicy.matchbox.domain.Post>"*/-->
+        <div th:each="postContent : ${posts}">
+            <div th:replace="components::post(${postContent})"></div>
+        </div>
+    </div>
 
 </div>
 <footer th:replace="components::footBar"></footer>
 
 
 <div th:replace="components::js"></div>
+
+
 </body>
 </html>

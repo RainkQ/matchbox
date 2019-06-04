@@ -17,6 +17,11 @@ import java.nio.ByteBuffer;
 
 public class Util {
 
+    public static boolean logined(UserService userService) {
+        User user = getCurrentUser(userService);
+        return user != null;
+    }
+
 
     public static Session injectUser(UserService userService, Model model) {
         Subject subject = SecurityUtils.getSubject();
@@ -71,6 +76,10 @@ public class Util {
         }
 //        System.out.println("现在用户:" + fin_user);
         return fin_user;
+    }
+
+    public static Feature getCurrentFeature(UserService userService) {
+        return getCurrentUser(userService).getFeature();
     }
 
 

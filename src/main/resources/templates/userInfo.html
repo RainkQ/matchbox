@@ -19,7 +19,7 @@
             <!-- Avatar -->
             <div class="avatar mx-auto white">
                 <img alt="avatar" class="rounded-circle" id="avatar"
-                     th:src="${user.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID() : 'assets/img/avatar.png'}">
+                     th:src="${user.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID() : '../static/assets/img/avatar.png'}">
             </div>
             <div class="text-center">
                 <a class="btn btn-default btn-rounded" data-target="#modalLoginAvatar" data-toggle="modal" href="">
@@ -40,12 +40,12 @@
                 <hr>
                 <!-- Quotation -->
                 <p id="personalDescription">
-                    <img src="assets/img/quote-left.svg" width="20">
+                    <img src="../static/assets/img/quote-left.svg" width="20">
 
                     <span id="signature" onclick="changeSignature()" style="white-space:pre"
                           th:text="${user.getFeature().getSignature()!=null?user.getFeature().getSignature():'还没有写个性签名呢！'}"></span>
 
-                    <img src="assets/img/quote-right.svg" width="20">
+                    <img src="../static/assets/img/quote-right.svg" width="20">
                 </p>
                 <hr>
 
@@ -63,7 +63,7 @@
 
 
                     <button class="btn btn-rounded btn-sm aqua-gradient" id="addTag_btn" onclick="addTag()"><img
-                            src="assets/img/plus.svg" width="20"></button>
+                            src="../static/assets/img/plus.svg" width="20"></button>
                 </div>
 
             </div>
@@ -82,7 +82,7 @@
                     <div class="modal-header">
                         <img alt="avatar"
                              class="rounded-circle img-responsive" id="preview-avatar"
-                             th:src="${user.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID() : 'assets/img/avatar.png'}">
+                             th:src="${user.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID() : '../static/assets/img/avatar.png'}">
                     </div>
                     <!--Body-->
                     <div class="modal-body text-center mb-1">

@@ -6,7 +6,15 @@
 <body>
 <header th:replace="components::navBar(explore,${user})"></header>
 <div class="container">
+    <div class="card-columns" id="posts">
+        <!--/*@thymesVar id="posts" type="java.util.ArrayList<tk.tnicy.matchbox.domain.Post>"*/-->
+        <div th:each="postContent : ${posts}">
+            <div th:replace="components::post(${postContent})"></div>
+        </div>
 
+
+    </div>
+    <div th:replace="components::pagination(explore,${page})"></div>
 </div>
 <footer th:replace="components::footBar"></footer>
 
