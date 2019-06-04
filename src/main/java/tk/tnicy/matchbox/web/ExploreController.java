@@ -32,7 +32,7 @@ public class ExploreController {
             page = 0;
         }
 
-        List<Post> posts = postService.getAllPosts(page, 20, Sort.unsorted());
+        List<Post> posts = postService.getAllPostsBytype(1, page, 20, Sort.unsorted());
 
         model.addAttribute("posts", posts);
         model.addAttribute("page", page);
