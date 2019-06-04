@@ -73,9 +73,9 @@
                 th:class="${activeUrl=='userInfo'?'nav-item avatar dropdown active':'nav-item avatar dropdown'}">
                 <a aria-expanded="false" aria-haspopup="true" class="nav-link dropdown-toggle"
                    data-toggle="dropdown" id="userInfo">
+                    <span class="align-middle" th:text="${user.getUsername()}"></span>
                     <img alt="avatar image" class="rounded-circle z-depth-0"
                          th:src="${user.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID() : '../static/assets/img/avatar.png'}">
-                    <span class="align-middle" th:text="${user.getUsername()}"></span>
 
                 </a>
                 <div aria-labelledby="userInfo"
@@ -247,6 +247,11 @@
         </div>
     </div>
 </nav>
+
+
+<div th:fragment="">
+
+</div>
 
 
 </body>
