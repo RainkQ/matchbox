@@ -1,12 +1,16 @@
 package tk.tnicy.matchbox.web;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import tk.tnicy.matchbox.domain.Post;
+import tk.tnicy.matchbox.domain.User;
 import tk.tnicy.matchbox.service.PostService;
 import tk.tnicy.matchbox.service.UserService;
 import tk.tnicy.matchbox.util.Util;
@@ -47,7 +51,25 @@ public class HomeController {
     }
 
 
+    @RequiresPermissions("normal")
+    @PostMapping("/publishPost")
+    public String publishPost(@RequestParam("content") String content,
+                              @RequestParam(name = "type", required = false) Integer type) {
+        User user = Util.getCurrentUser(userService);
+        Post newPost = new Post();
+        if (type == null) {
+            type = 1;
+        }
+        newPost.setType(type);
+        newPost.setContent(content);
+        newPost.setAuthor(user.getFeature());
+        newPost.setTime(Util.now());
 
+        user.getFeature().getPosts().add(newPost);
+        userService.saveAndFlush(user);
+
+        return "redirect:/";
+    }
 
 
 }

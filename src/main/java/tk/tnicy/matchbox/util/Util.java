@@ -13,6 +13,8 @@ import tk.tnicy.matchbox.domain.User;
 import tk.tnicy.matchbox.service.UserService;
 
 import java.nio.ByteBuffer;
+import java.sql.Timestamp;
+import java.util.Calendar;
 
 
 public class Util {
@@ -27,12 +29,16 @@ public class Util {
         Subject subject = SecurityUtils.getSubject();
         User user = getCurrentUser(userService);
 
+
         if (user == null) {
             user = new User();
+            model.addAttribute("ifLogin", false);
             user.setUsername("未登录");
             user.setPassword("");
             user.setFeature(new Feature());
             user.setId(-1L);
+        } else {
+            model.addAttribute("ifLogin", true);
         }
 
         model.addAttribute("user", user);
@@ -98,7 +104,9 @@ public class Util {
         return new String(buffer.array());
     }
 
-
+    public static Timestamp now() {
+        return new Timestamp(Calendar.getInstance().getTime().getTime());
+    }
 
 
 }

@@ -3,9 +3,11 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="components::head"></head>
+
 <body>
 <header th:replace="components::navBar(index,${user})"></header>
 <div class="container">
+    <div th:replace="components::creatPostBox"></div>
     <div class="card-columns" id="posts">
         <!--/*@thymesVar id="posts" type="java.util.ArrayList<tk.tnicy.matchbox.domain.Post>"*/-->
         <div th:each="postContent : ${posts}">
@@ -19,7 +21,6 @@
 
 
 <div th:replace="components::js"></div>
-
 
 </body>
 </html>

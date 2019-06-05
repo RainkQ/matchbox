@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "post")
@@ -31,7 +31,7 @@ public class Post implements Serializable {
     private Feature author;
 
 
-    private Date time; // 日期类型，格式：yyyy-MM-dd HH:mm:ss
+    private Timestamp time; // 日期类型，格式：yyyy-MM-dd HH:mm:ss
 
     private Integer type; // 0:关注我的人可以看到，-1:私密， 1:所有人可以看到
 }

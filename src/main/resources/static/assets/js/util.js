@@ -11,3 +11,4 @@ function randomNum(minNum, maxNum) {
             break;
     }
 }
+

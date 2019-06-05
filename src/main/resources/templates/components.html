@@ -18,6 +18,7 @@
     <link href="../static/assets/css/theme.css" rel="stylesheet">
     <link href="/static/favicon.ico" rel="icon" type="image/x-icon">
     <title>matchbox</title>
+
 </head>
 <body>
 
@@ -192,7 +193,14 @@
     <script color="255,255,255" count="99" opacity='0.6' src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"
             type="text/javascript" zIndex="-1"></script>
 
+    <script src="../static/assets/MDB/js/compiled-4.8.1.min.js"></script>
+
     <script src="../static/assets/js/util.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.mdb-select').materialSelect();
+        });
+    </script>
 </div>
 
 
@@ -203,23 +211,35 @@
     <div class="card testimonial-card " th:with="feature = ${postContent.getAuthor()}">
 
         <!-- Background color -->
-        <div class="card-up aqua-gradient" style="height: 40px"></div>
+        <div class="card-up aqua-gradient" style="height: 30px"></div>
 
         <!-- Avatar -->
-        <div class="avatar mx-auto aqua-gradient" style="height: 60px; width: 60px; margin-top: -30px; border: 0;">
-            <img class="rounded-circle img-responsive"
-                 th:src="${feature.getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+feature.getAvatarUUID() : '../static/assets/img/avatar.png'}">
+        <div class="row" style="height: 40px; margin-top: -20px; border: 0;">
+            <div class="col-3 text-right">
+                <img class="rounded-circle img-responsive"
+                     style="height: 40px; width: 40px;"
+                     th:src="${feature.getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+feature.getAvatarUUID() : '../static/assets/img/avatar.png'}">
 
+            </div>
+            <div class="col-9" style="margin-top: -5px;">
+                <h5 class=" text-white " style="max-height: 20px;" th:text="${feature.getUser().getUsername()}">Martha
+                    Smith</h5>
+                <h6 class="text-black-50 overflow-auto" style="max-height: 20px;" th:text="${feature.getSignature()}">
+                    sig</h6>
+            </div>
         </div>
 
         <!-- Content -->
         <div class="card-body " style="padding-top: 0.5rem; padding-bottom: 0.5px;">
             <!-- Name -->
-            <h5 class="card-title" th:text="${feature.getUser().getUsername()}">Martha Smith</h5>
             <hr style="margin: 5px">
             <!-- Quotation -->
-            <p th:text="${postContent.getContent()}"> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eos,
+            <p class="text-dark" th:text="${postContent.getContent()}"> Lorem ipsum dolor sit amet, consectetur
+                adipisicing elit. Eos,
                 adipisci</p>
+            <hr style="margin: 5px">
+            <p class="text-right" style="padding-top: .25em; font-size: 0.75rem;opacity: .75;"
+               th:text="${postContent.getTime()}">time</p>
         </div>
 
     </div>
@@ -249,10 +269,32 @@
 </nav>
 
 
-<div th:fragment="">
+<div class="card" style="margin: 10px 0;padding: 0 20px;" th:fragment="creatPostBox">
+
+    <form action="/publishPost" class="row " method="post">
+
+        <div class=" col-12 md-form " style="margin-bottom: 0">
+            <textarea class="md-textarea form-control" id="createPostTextarea" name="content" rows="3"></textarea>
+            <label for="createPostTextarea">内容</label>
+        </div>
+        <div class="col-12" style="margin: -20px 0">
+            <div class="row">
+                <div class="col-6 d-flex align-items-center justify-content-center">
+                    <button class="text-right btn peach-gradient" type="submit">发布</button>
+                </div>
+                <div class="col-6 d-flex align-items-center justify-content-center">
+                    <select class=" mdb-select md-form" name="type">
+                        <option disabled selected value="">可见范围</option>
+                        <option value="-1">自己可见</option>
+                        <option value="0">粉丝可见</option>
+                        <option value="1">所有可见</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </form>
 
 </div>
-
 
 </body>
 </html>

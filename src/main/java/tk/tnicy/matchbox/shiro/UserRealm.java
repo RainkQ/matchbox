@@ -8,7 +8,6 @@ import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import tk.tnicy.matchbox.domain.User;
-import tk.tnicy.matchbox.domain.UserRepository;
 import tk.tnicy.matchbox.service.UserService;
 
 import java.util.List;
@@ -18,8 +17,6 @@ public class UserRealm extends AuthorizingRealm {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserRepository userRepository;
 
 
     //    授权
