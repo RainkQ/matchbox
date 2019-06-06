@@ -9,16 +9,15 @@ import tk.tnicy.matchbox.service.UserService;
 import tk.tnicy.matchbox.util.Util;
 
 @Controller
-public class FriendsController {
-
+public class FollowsController {
     @Autowired
     UserService userService;
 
     @RequiresPermissions("normal")
-    @GetMapping("/newFriends")
-    public String getNewFriends(Model model) {
+    @GetMapping("/follows")
+    public String getFollows(Model model) {
         Util.injectUser(userService, model);
 
-        return "newFriends";
+        return "follows";
     }
 }

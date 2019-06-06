@@ -7,6 +7,13 @@
 <header th:replace="components::navBar(friends,${user})"></header>
 <div class="container">
 
+    <div class="card-columns" id="posts">
+        <!--/*@thymesVar id="features" type="java.util.ArrayList<tk.tnicy.matchbox.domain.Feature>"*/-->
+        <div th:each="feature : ${features}">
+            <div th:replace="components::userCard(${feature})"></div>
+        </div>
+    </div>
+
 </div>
 <footer th:replace="components::footBar"></footer>
 

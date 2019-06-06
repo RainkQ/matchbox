@@ -48,7 +48,12 @@
             </li>
             <li class="nav-item"
                 th:class="${activeUrl=='friends'?'nav-item active':'nav-item'}">
-                <a class="nav-link" href="/friends">朋友
+                <a class="nav-link" href="/follows">关注
+                </a>
+            </li>
+            <li class="nav-item"
+                th:class="${activeUrl=='friends'?'nav-item active':'nav-item'}">
+                <a class="nav-link" href="/newFriends">新朋友
                 </a>
             </li>
             <!--            <li class="nav-item dropdown"-->
@@ -183,13 +188,13 @@
 <div th:fragment="js">
     <!-- SCRIPTS -->
     <!-- JQuery -->
-    <script src="../static/assets/MDB/js/jquery-3.3.1.min.js" type="text/javascript"></script>
+    <!--    <script src="../static/assets/MDB/js/jquery-3.3.1.min.js" type="text/javascript"></script>-->
     <!-- Bootstrap tooltips -->
-    <script src="../static/assets/MDB/js/popper.min.js" type="text/javascript"></script>
+    <!--    <script src="../static/assets/MDB/js/popper.min.js" type="text/javascript"></script>-->
     <!-- Bootstrap core JavaScript -->
-    <script src="../static/assets/MDB/js/bootstrap.min.js" type="text/javascript"></script>
+    <!--    <script src="../static/assets/MDB/js/bootstrap.min.js" type="text/javascript"></script>-->
     <!-- MDB core JavaScript -->
-    <script src="../static/assets/MDB/js/mdb.min.js" type="text/javascript"></script>
+    <!--    <script src="../static/assets/MDB/js/mdb.min.js" type="text/javascript"></script>-->
     <script color="255,255,255" count="99" opacity='0.6' src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"
             type="text/javascript" zIndex="-1"></script>
 
@@ -295,6 +300,56 @@
     </form>
 
 </div>
+
+
+<!-- userCard -->
+<!--/*@thymesVar id="feature" type="tk.tnicy.matchbox.domain.Feature"*/-->
+<div class="card testimonial-card" th:fragment="userCard(feature)">
+
+    <!-- Background color -->
+    <div class="card-up aqua-gradient"></div>
+
+    <!-- Avatar -->
+    <div class="avatar mx-auto white">
+        <img alt="avatar" class="rounded-circle" id="avatar"
+             th:src="${feature.getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+feature.getAvatarUUID() : '../static/assets/img/avatar.png'}">
+    </div>
+
+    <!-- Content -->
+    <div class="card-body">
+        <!-- Name -->
+        <h4 class="card-title"><strong th:text="${feature.getUser().getUsername()}">用户名</strong></h4>
+        <!-- Subtitle -->
+        <div id="gender-div">
+            <h6 class="font-weight-bold indigo-text py-2" id="gender"
+                th:text="${feature.getGender()}==true?'小哥哥':'小姐姐'">性别
+            </h6>
+        </div>
+        <hr>
+        <!-- Quotation -->
+        <p id="personalDescription">
+            <img src="../static/assets/img/quote-left.svg" width="20">
+
+            <span id="signature" style="white-space:pre"
+                  th:text="${feature.getSignature()!=null?feature.getSignature():'还没有写个性签名呢！'}"></span>
+
+            <img src="../static/assets/img/quote-right.svg" width="20">
+        </p>
+        <hr>
+
+        <div id="tags">
+
+            <button class="btn btn-rounded btn-sm aqua-gradient" th:each="tag : ${feature.getTags()}"
+                    th:text="${tag.getLabel()}">Aqua
+            </button>
+
+        </div>
+
+    </div>
+
+
+</div>
+
 
 </body>
 </html>
