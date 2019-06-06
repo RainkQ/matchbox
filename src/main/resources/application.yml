@@ -24,8 +24,10 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         temp:
           use_jdbc_metadata_defaults: false
-        enable_lazy_load_no_trans: true
-    open-in-view: true
+        event:
+          merge:
+            entity_copy_observer: allow
+
   datasource:
     url: jdbc:postgresql://rainkq.tk:5432/matchbox?useSSl=false&useunicode=true&characterEncoding=utf8
     driver-class-name: org.postgresql.Driver

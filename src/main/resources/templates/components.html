@@ -47,6 +47,7 @@
 
 <!--Navbar -->
 <!--/*@thymesVar id="user" type="tk.tnicy.matchbox.domain.User"*/-->
+<!--/*@thymesVar id="activeUrl" type="java.lang.String"*/-->
 <nav class="mb-1 navbar navbar-expand-lg navbar-dark default-color lighten-1" th:fragment="navBar(activeUrl,user)">
     <a class="navbar-brand" href="/">
         <img alt="mdb logo" class="d-inline-block align-top"
@@ -69,12 +70,12 @@
                 </a>
             </li>
             <li class="nav-item"
-                th:class="${activeUrl=='friends'?'nav-item active':'nav-item'}">
+                th:class="${activeUrl=='follows'?'nav-item active':'nav-item'}">
                 <a class="nav-link" href="/follows">关注
                 </a>
             </li>
             <li class="nav-item"
-                th:class="${activeUrl=='friends'?'nav-item active':'nav-item'}">
+                th:class="${activeUrl=='newFriends'?'nav-item active':'nav-item'}">
                 <a class="nav-link" href="/newFriends">新朋友
                 </a>
             </li>
@@ -317,27 +318,44 @@
 </div>
 
 
-<!-- userCard -->
 <!--/*@thymesVar id="feature" type="tk.tnicy.matchbox.domain.Feature"*/-->
-<div class="card testimonial-card" th:fragment="userCard(user)">
+<!--/*@thymesVar id="followed" type="java.lang.Boolean"*/-->
+<div class="card testimonial-card" th:fragment="userCard(feature, followed)">
+    <!-- userCard -->
 
     <!-- Background color -->
     <div class="card-up aqua-gradient"></div>
 
+
     <!-- Avatar -->
-    <div class="avatar mx-auto white">
-        <img alt="avatar" class="rounded-circle" id="avatar"
-             th:src="${user.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID() : '../static/assets/img/avatar.png'}">
+    <div class="row" style="height: 60px; margin-top: -30px; border: 0;">
+        <div class="col-3 text-right">
+            <img class="rounded-circle img-responsive"
+                 style="height: 60px; width: 60px;"
+                 th:src="${feature.getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+feature.getAvatarUUID() : '../static/assets/img/avatar.png'}">
+
+        </div>
+        <div class="col-9">
+            <button class="btn btn-rounded peach-gradient"
+                    th:if="!${followed}"
+                    th:onclick="follow([[${feature.getUser().getId()}]])"> 关注
+            </button>
+            <button class="btn btn-rounded peach-gradient"
+                    th:if="${followed}"
+                    th:onclick="unfollow([[${feature.getUser().getId()}]])"> 取消关注
+            </button>
+        </div>
     </div>
+
 
     <!-- Content -->
     <div class="card-body">
         <!-- Name -->
-        <h4 class="card-title"><strong th:text="${user.getUsername()}">用户名</strong></h4>
+        <h4 class="card-title"><strong th:text="${feature.getUser().getUsername()}">用户名</strong></h4>
         <!-- Subtitle -->
         <div id="gender-div">
             <h6 class="font-weight-bold indigo-text py-2" id="gender"
-                th:text="${user.getFeature().getGender()}==true?'小哥哥':'小姐姐'">性别
+                th:text="${feature.getGender()}==true?'小哥哥':'小姐姐'">性别
             </h6>
         </div>
         <hr>
@@ -346,7 +364,7 @@
             <img src="../static/assets/img/quote-left.svg" width="20">
 
             <span id="signature" style="white-space:pre"
-                  th:text="${user.getFeature().getSignature()!=null?user.getFeature().getSignature():'还没有写个性签名呢！'}"></span>
+                  th:text="${feature.getSignature()!=null?feature.getSignature():'还没有写个性签名呢！'}"></span>
 
             <img src="../static/assets/img/quote-right.svg" width="20">
         </p>
@@ -354,14 +372,13 @@
 
         <div id="tags">
 
-            <button class="btn btn-rounded btn-sm aqua-gradient" th:each="tag : ${user.getFeature().getTags()}"
+            <button class="btn btn-rounded btn-sm aqua-gradient" th:each="tag : ${feature.getTags()}"
                     th:text="${tag.getLabel()}">Aqua
             </button>
 
         </div>
 
     </div>
-
 
 </div>
 

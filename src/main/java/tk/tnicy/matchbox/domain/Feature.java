@@ -36,7 +36,7 @@ public class Feature implements Serializable {
     private String signature; //个性签名
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany(targetEntity = Tag.class, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = Tag.class, cascade = {CascadeType.ALL, CascadeType.MERGE})
     private Set<Tag> tags; //tags
 
 
@@ -49,9 +49,11 @@ public class Feature implements Serializable {
 //    里程碑
 
     //    message
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "sender")
     private List<Message> sentMessages;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver")
     private List<Message> receivedMessages;
 
@@ -64,5 +66,6 @@ public class Feature implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
     private List<Post> posts;
+
 
 }

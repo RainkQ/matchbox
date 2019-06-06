@@ -27,4 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @CachePut(value = "users", key = "#user.getUsername()", unless = "#result == null")
     User saveAndFlush(User user);
 
+
+    User findUserById(Long id);
+
 }

@@ -4,13 +4,13 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:replace="components::head"></head>
 <body>
-<header th:replace="components::navBar(friends,${user})"></header>
+<header th:replace="components::navBar(newFriends,${user})"></header>
 <div class="container">
 
-    <div class="card-columns" id="posts">
-        <!--/*@thymesVar id="users" type="java.util.ArrayList<tk.tnicy.matchbox.domain.User>"*/-->
-        <div th:each="user : ${users}">
-            <div th:replace="components::userCard(${user})"></div>
+    <div class="card-columns" id="newFriends">
+        <!--/*@thymesVar id="features" type="java.util.ArrayList<tk.tnicy.matchbox.domain.Feature>"*/-->
+        <div th:each="feature:${features}">
+            <div th:replace="components::userCard(${feature}, false)"></div>
         </div>
     </div>
 
@@ -19,5 +19,7 @@
 
 
 <div th:replace="components::js"></div>
+
+
 </body>
 </html>

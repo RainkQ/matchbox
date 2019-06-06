@@ -12,3 +12,41 @@ function randomNum(minNum, maxNum) {
     }
 }
 
+function follow(id) {
+    let jsonObj = {"id": id};
+    $.ajax({
+        type: 'POST',
+        url: "/followUser",
+        dataType: "json",
+        data: JSON.stringify(jsonObj),
+        contentType: "application/json",
+        success: function (data) {
+            console.log(data)
+        },
+        error: function () {
+            console.log("fucking error")
+        },
+        complete: function () {
+            $("#newFriends").load("http://rainkq.tk:49521/newFriends #newFriends");
+        }
+    });
+}
+
+function unfollow(id) {
+    let jsonObj = {"id": id};
+    $.ajax({
+        type: 'POST',
+        url: "/unfollowUser",
+        dataType: "json",
+        data: JSON.stringify(jsonObj),
+        contentType: "application/json",
+        success: function (data) {
+            console.log(data)
+        },
+        error: function () {
+            console.log("fucking error")
+        },
+        complete: function () {
+        }
+    });
+}
