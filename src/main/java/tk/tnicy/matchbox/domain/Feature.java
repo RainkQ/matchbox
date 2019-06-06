@@ -7,6 +7,7 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -67,5 +68,16 @@ public class Feature implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
     private List<Post> posts;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Feature)) return false;
+        Feature feature = (Feature) o;
+        return Objects.equals(getId(), feature.getId());
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
 }

@@ -1,8 +1,7 @@
 package tk.tnicy.matchbox.domain;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -11,8 +10,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "normal_user")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class User implements Serializable {
 

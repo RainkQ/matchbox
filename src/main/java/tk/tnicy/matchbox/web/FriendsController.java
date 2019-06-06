@@ -50,10 +50,12 @@ public class FriendsController {
     public String unfollowUser(@RequestBody User user) {
         User me = Util.getCurrentUser(userService);
         User target = userService.findUserById(user.getId());
+        Feature feature = target.getFeature();
+
         List<Feature> follows = me.getFeature().getFollows();
-        System.out.println(follows.toString());
-        follows.remove(target.getFeature());
-        me.getFeature().setFollows(follows);
+
+
+        follows.remove(feature);
 
         userService.saveAndFlush(me);
         return "ok";
