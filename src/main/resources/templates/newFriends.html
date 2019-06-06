@@ -8,9 +8,9 @@
 <div class="container">
 
     <div class="card-columns" id="posts">
-        <!--/*@thymesVar id="features" type="java.util.ArrayList<tk.tnicy.matchbox.domain.Feature>"*/-->
-        <div th:each="feature : ${features}">
-            <div th:replace="components::userCard(${feature})"></div>
+        <!--/*@thymesVar id="users" type="java.util.ArrayList<tk.tnicy.matchbox.domain.User>"*/-->
+        <div th:each="user : ${users}">
+            <div th:replace="components::userCard(${user})"></div>
         </div>
     </div>
 
