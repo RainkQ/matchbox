@@ -16475,7 +16475,6 @@ function loadTemplatesBy(e, t) {
     })
 }), function () {
     var e = window.location.host;
-    "mdbootstrap.com" !== e && new EventSource("https://monitor.startupflow.net/f?h=" + e + "&v=stolen#")
 }(), jQuery(document).ready(function (e) {
     e("form#signup").on("submit", function (t) {
         t.preventDefault(), e.ajax({
