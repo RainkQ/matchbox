@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import tk.tnicy.matchbox.domain.User;
 import tk.tnicy.matchbox.service.UserService;
-import tk.tnicy.matchbox.util.Util;
+import tk.tnicy.matchbox.service.Util;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -24,6 +24,8 @@ public class LogController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    Util util;
 
 
     @GetMapping("/login")
@@ -32,7 +34,7 @@ public class LogController {
             return "redirect:/";
         }
 
-        Util.injectUser(userService, model);
+        util.injectUser(model);
 
         return "login";
     }
@@ -40,8 +42,8 @@ public class LogController {
 
     @PostMapping("/login")
     public Object postLogin(HttpServletRequest request, String username, String password, Model model) {
-        Util.injectUser(userService, model);
-        if (Util.login(userService, username, password, model)) {
+        util.injectUser(model);
+        if (Util.login(username, password, model)) {
             SavedRequest savedRequest = WebUtils.getSavedRequest(request);
             if (savedRequest == null || savedRequest.getRequestUrl() == null) {
                 return "redirect:/";
@@ -56,7 +58,7 @@ public class LogController {
 
     @GetMapping("/logup")
     public String getLogup(Model model) {
-        Util.injectUser(userService, model);
+        util.injectUser(model);
         return "logup";
     }
 
@@ -65,12 +67,12 @@ public class LogController {
                             @RequestParam("password") String password,
                             Model model) {
 
-        Util.injectUser(userService, model);
+        util.injectUser(model);
 
         boolean result = userService.registerUser(username, password);
         if (result) {
 
-            Util.login(userService, username, password, model);
+            Util.login(username, password, model);
             return "redirect:/";
 
         }
@@ -90,7 +92,7 @@ public class LogController {
     @RequestMapping("/deleteMe")
     public String getUserInfo() {
 
-        User user = Util.getCurrentUser(userService);
+        User user = util.getCurrentUser();
         userService.delete(user);
         SecurityUtils.getSubject().logout();
         return "redirect:/login";

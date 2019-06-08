@@ -13,7 +13,7 @@ import tk.tnicy.matchbox.domain.Tag;
 import tk.tnicy.matchbox.domain.User;
 import tk.tnicy.matchbox.service.QiniuUploadFileService;
 import tk.tnicy.matchbox.service.UserService;
-import tk.tnicy.matchbox.util.Util;
+import tk.tnicy.matchbox.service.Util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,6 +26,8 @@ import java.util.UUID;
 public class UserInfoController {
     @Autowired
     UserService userService;
+    @Autowired
+    Util util;
 
     @Autowired
     QiniuUploadFileService qiniuUploadFileService;
@@ -36,7 +38,7 @@ public class UserInfoController {
     @GetMapping("/userInfo")
     public String getUserInfo(Model model) {
 
-        Util.injectUser(userService, model);
+        util.injectUser(model);
 
 
         return "userInfo";
@@ -51,7 +53,7 @@ public class UserInfoController {
     @ResponseBody
     public ResponseEntity addTag(@RequestBody Tag tag) {
 
-        User user = Util.getCurrentUser(userService);
+        User user = util.getCurrentUser();
 
         Tag existedTag = userService.findTagByLabel(tag.getLabel());
 
@@ -71,7 +73,7 @@ public class UserInfoController {
     @ResponseBody
     public ResponseEntity deleteTag(@RequestBody Tag tag) {
 
-        User user = Util.getCurrentUser(userService);
+        User user = util.getCurrentUser();
 
 
         System.out.println("删除前tags:" + user.getFeature().getTags());
@@ -90,7 +92,7 @@ public class UserInfoController {
     @RequiresPermissions("normal")
     @PostMapping("/addSignature")
     public ResponseEntity addSignature(@RequestBody Feature feature) {
-        User user = Util.getCurrentUser(userService);
+        User user = util.getCurrentUser();
 //        System.out.println(feature);
         System.out.println(feature.getSignature());
         user.getFeature().setSignature(feature.getSignature());
@@ -104,7 +106,7 @@ public class UserInfoController {
     @PostMapping("/editGender")
     public ResponseEntity editGender(@RequestBody Feature feature) {
 
-        User user = Util.getCurrentUser(userService);
+        User user = util.getCurrentUser();
 
         System.out.println(feature.getGender());
         user.getFeature().setGender(feature.getGender());
@@ -124,7 +126,7 @@ public class UserInfoController {
             }
 
 
-            User user = Util.getCurrentUser(userService);
+            User user = util.getCurrentUser();
 
             InputStream image = multipartFile.getInputStream();
 

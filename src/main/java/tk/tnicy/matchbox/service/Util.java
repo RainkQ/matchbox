@@ -1,4 +1,4 @@
-package tk.tnicy.matchbox.util;
+package tk.tnicy.matchbox.service;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
@@ -7,49 +7,23 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import tk.tnicy.matchbox.domain.Feature;
 import tk.tnicy.matchbox.domain.User;
-import tk.tnicy.matchbox.service.UserService;
 
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
-
+@Service
 public class Util {
 
-    public static boolean logined(UserService userService) {
-        User user = getCurrentUser(userService);
-        return user != null;
-    }
+    @Autowired
+    UserService userService;
 
-
-    public static Session injectUser(UserService userService, Model model) {
-        Subject subject = SecurityUtils.getSubject();
-        User user = getCurrentUser(userService);
-
-
-        if (user == null) {
-            user = new User();
-            model.addAttribute("ifLogin", false);
-            user.setUsername("未登录");
-            user.setPassword("");
-            user.setFeature(new Feature());
-            user.setId(-1L);
-        } else {
-            model.addAttribute("ifLogin", true);
-        }
-
-        model.addAttribute("user", user);
-
-        return subject.getSession();
-
-
-    }
-
-
-    public static boolean login(UserService userService, String username, String password, Model model) {
+    public static boolean login(String username, String password, Model model) {
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         try {
@@ -71,8 +45,36 @@ public class Util {
         return false;
     }
 
+    public boolean logined() {
+        User user = getCurrentUser();
+        return user != null;
+    }
 
-    public static User getCurrentUser(UserService userService) {
+    public Session injectUser(Model model) {
+        Subject subject = SecurityUtils.getSubject();
+        User user = getCurrentUser();
+
+
+        if (user == null) {
+            user = new User();
+            model.addAttribute("ifLogin", false);
+            user.setUsername("未登录");
+            user.setPassword("");
+            user.setFeature(new Feature());
+            user.setId(-1L);
+        } else {
+            model.addAttribute("ifLogin", true);
+        }
+
+        model.addAttribute("user", user);
+
+        return subject.getSession();
+
+
+    }
+
+    //    @Cacheable(value = "users",key = "#result.getUsername()",unless = "#result == null")
+    public User getCurrentUser() {
         User user = (User) SecurityUtils.getSubject().getPrincipal();
         User fin_user;
         if (user != null) {
@@ -84,8 +86,8 @@ public class Util {
         return fin_user;
     }
 
-    public static Feature getCurrentFeature(UserService userService) {
-        return getCurrentUser(userService).getFeature();
+    public Feature getCurrentFeature() {
+        return getCurrentUser().getFeature();
     }
 
 

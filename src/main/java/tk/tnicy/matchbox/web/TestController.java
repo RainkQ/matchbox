@@ -8,7 +8,7 @@ import tk.tnicy.matchbox.domain.Post;
 import tk.tnicy.matchbox.domain.User;
 import tk.tnicy.matchbox.service.PostService;
 import tk.tnicy.matchbox.service.UserService;
-import tk.tnicy.matchbox.util.Util;
+import tk.tnicy.matchbox.service.Util;
 
 @Controller
 public class TestController {
@@ -20,11 +20,13 @@ public class TestController {
     @Autowired
     PostService postService;
 
+    @Autowired
+    Util util;
 
     @RequiresPermissions("normal")
     @GetMapping(value = "/test")
     public String test() {
-        User user = Util.getCurrentUser(userService);
+        User user = util.getCurrentUser();
 
         Post post = new Post();
         post.setId(null);

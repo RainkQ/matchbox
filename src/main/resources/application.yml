@@ -37,8 +37,8 @@ spring:
   redis:
     database: 0
     host: rainkq.tk
-    port: 6379
-    password: ",./,./"
+    port: 6699
+    password: "h0ldingy@u"
 
 
   thymeleaf:

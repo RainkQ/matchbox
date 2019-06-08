@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.tnicy.matchbox.domain.*;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -54,6 +55,9 @@ public class UserService {
         user.setPassword(newPs);
         user.setFeature(new Feature());
         user.getFeature().setTags(new HashSet<>());
+        user.getFeature().setFollows(new ArrayList<>());
+        user.getFeature().setAvatar(new Avatar());
+        user.getFeature().setPosts(new ArrayList<>());
 
         // 看数据库中是否存在该账户
         User hadUser = userRepository.findUserByUsername(username);
@@ -109,5 +113,10 @@ public class UserService {
     @Transactional
     public User findUserById(Long id) {
         return userRepository.findUserById(id);
+    }
+
+
+    public List<BigInteger> findUserBySimilarity(Long id) {
+        return userRepository.findUserBySimilarity(id);
     }
 }

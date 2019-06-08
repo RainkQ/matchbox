@@ -19,7 +19,7 @@
             <!-- Avatar -->
             <div class="avatar mx-auto white">
                 <img alt="avatar" class="rounded-circle" id="avatar"
-                     th:src="${user.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID() : '../static/assets/img/avatar.png'}">
+                     th:src="${user.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID()+'?imageView2/1/w/200/h/200/interlace/1' : '../static/assets/img/avatar.png'}">
             </div>
             <div class="text-center">
                 <a class="btn btn-default btn-rounded" data-target="#modalLoginAvatar" data-toggle="modal" href="">
@@ -82,7 +82,7 @@
                     <div class="modal-header">
                         <img alt="avatar"
                              class="rounded-circle img-responsive" id="preview-avatar"
-                             th:src="${user.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID() : '../static/assets/img/avatar.png'}">
+                             th:src="${user.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID()+'?imageView2/1/w/200/h/200/interlace/1' : '../static/assets/img/avatar.png'}">
                     </div>
                     <!--Body-->
                     <div class="modal-body text-center mb-1">

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import tk.tnicy.matchbox.domain.Post;
 import tk.tnicy.matchbox.service.PostService;
 import tk.tnicy.matchbox.service.UserService;
-import tk.tnicy.matchbox.util.Util;
+import tk.tnicy.matchbox.service.Util;
 
 import java.util.List;
 
@@ -21,18 +21,20 @@ public class ExploreController {
     UserService userService;
     @Autowired
     PostService postService;
+    @Autowired
+    Util util;
 
 
     @RequiresPermissions("normal")
     @GetMapping({"/explore", "/explore/{page}"})
-    public String getChat(Model model, @PathVariable(value = "page", required = false) Integer page) {
-        Util.injectUser(userService, model);
+    public String getPublicPosts(Model model, @PathVariable(value = "page", required = false) Integer page) {
+        util.injectUser(model);
 
         if (page == null) {
             page = 0;
         }
 
-        List<Post> posts = postService.getAllPostsBytype(1, page, 20, Sort.unsorted());
+        List<Post> posts = postService.getAllPostsBytype(1, page, 20, Sort.by("time").descending());
 
         model.addAttribute("posts", posts);
         model.addAttribute("page", page);

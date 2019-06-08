@@ -27,7 +27,7 @@ function follow(id) {
             console.log("fucking error")
         },
         complete: function () {
-            $("#newFriends").load("http://rainkq.tk:49521/newFriends #newFriends");
+            $("#main").load("http://rainkq.tk:49521/newFriends #newFriends");
         }
     });
 }
@@ -47,6 +47,8 @@ function unfollow(id) {
             console.log("fucking error")
         },
         complete: function () {
+            $("#main").load("http://rainkq.tk:49521/follows #follows");
         }
     });
 }
+

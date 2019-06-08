@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import tk.tnicy.matchbox.domain.Feature;
 import tk.tnicy.matchbox.domain.User;
 import tk.tnicy.matchbox.service.UserService;
-import tk.tnicy.matchbox.util.Util;
+import tk.tnicy.matchbox.service.Util;
 
 import java.util.List;
 
@@ -16,13 +16,15 @@ import java.util.List;
 public class FollowsController {
     @Autowired
     UserService userService;
+    @Autowired
+    Util util;
 
     @RequiresPermissions("normal")
     @GetMapping("/follows")
     public String getFollows(Model model) {
-        Util.injectUser(userService, model);
+        util.injectUser(model);
 
-        User user = Util.getCurrentUser(userService);
+        User user = util.getCurrentUser();
         List<Feature> follows = user.getFeature().getFollows();
 
         model.addAttribute("features", follows);

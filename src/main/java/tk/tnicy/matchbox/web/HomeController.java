@@ -13,7 +13,7 @@ import tk.tnicy.matchbox.domain.Post;
 import tk.tnicy.matchbox.domain.User;
 import tk.tnicy.matchbox.service.PostService;
 import tk.tnicy.matchbox.service.UserService;
-import tk.tnicy.matchbox.util.Util;
+import tk.tnicy.matchbox.service.Util;
 
 import java.util.List;
 
@@ -26,10 +26,13 @@ public class HomeController {
     @Autowired
     PostService postService;
 
+    @Autowired
+    Util util;
+
     @GetMapping(value = {"/", "/index/{page}"})
     public String getIndex(Model model, @PathVariable(value = "page", required = false) Integer page) {
 
-        Util.injectUser(userService, model);
+        util.injectUser(model);
 
         List<Post> posts;
 
@@ -37,10 +40,10 @@ public class HomeController {
             page = 0;
         }
 
-        if (Util.logined(userService)) {
-            posts = postService.getMyFollowPosts(Util.getCurrentUser(userService).getFeature(), 1, 20, Sort.unsorted());
+        if (util.logined()) {
+            posts = postService.getMyFollowPosts(util.getCurrentFeature(), page, 20, Sort.by("time").descending());
         } else {
-            posts = postService.getAllPostsBytype(1, page, 20, Sort.unsorted());
+            posts = postService.getAllPostsBytype(1, page, 20, Sort.by("time").descending());
         }
 
         model.addAttribute("posts", posts);
@@ -55,7 +58,7 @@ public class HomeController {
     @PostMapping("/publishPost")
     public String publishPost(@RequestParam("content") String content,
                               @RequestParam(name = "type", required = false) Integer type) {
-        User user = Util.getCurrentUser(userService);
+        User user = util.getCurrentUser();
         Post newPost = new Post();
         if (type == null) {
             type = 1;
