@@ -12,4 +12,5 @@ public interface FeatureRepository extends JpaRepository<Feature, Long> {
 
     Page<Feature> findAllByIdIn(Collection<Long> id, Pageable pageable);
 
+    Feature findFeatureById(Long id);
 }

@@ -212,6 +212,7 @@
     <script color="255,255,255" count="99" opacity='0.6' src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"
             type="text/javascript" zIndex="-1"></script>
 
+
     <script src="../static/assets/MDB/js/compiled.js"></script>
 
     <script src="../static/assets/js/util.js"></script>
@@ -324,32 +325,58 @@
     <!-- userCard -->
 
     <!-- Background color -->
-    <div class="card-up aqua-gradient"></div>
+    <div class="card-up aqua-gradient" style="height: 45px"></div>
 
 
     <!-- Avatar -->
-    <div class="row" style="height: 60px; margin-top: -30px; border: 0;">
-        <div class="col-3 text-right">
-            <img class="rounded-circle img-responsive"
-                 style="height: 60px; width: 60px;"
-                 th:src="${feature.getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+feature.getAvatarUUID()+'?imageView2/1/w/200/h/200/interlace/1' : '../static/assets/img/avatar.png'}">
+    <div class="d-flex align-items-center justify-content-around " style=" margin-top: -30px; border: 0;">
 
-        </div>
-        <div class="col-9">
-            <button class="btn btn-rounded peach-gradient"
-                    th:if="!${followed}"
-                    th:onclick="follow([[${feature.getUser().getId()}]])"> 关注
-            </button>
-            <button class="btn btn-rounded peach-gradient"
-                    th:if="${followed}"
-                    th:onclick="unfollow([[${feature.getUser().getId()}]])"> 取消关注
-            </button>
+
+        <button class="btn btn-rounded btn-sm peach-gradient" th:if="!${followed}"
+                th:onclick="follow([[${feature.getUser().getId()}]])"
+                type="button"> 关注
+        </button>
+        <button class="btn btn-rounded btn-sm peach-gradient" th:if="${followed}"
+                th:onclick="unfollow([[${feature.getUser().getId()}]])"
+                type="button"> 取关
+        </button>
+
+        <img class="rounded-circle img-responsive"
+             style="height: 60px; width: 60px;"
+             th:src="${feature.getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+feature.getAvatarUUID()+'?imageView2/1/w/200/h/200/interlace/1' : '../static/assets/img/avatar.png'}">
+
+        <button aria-expanded="true" class="btn btn-rounded btn-sm blue-gradient"
+                data-toggle="collapse" th:aria-controls="'letter-' + ${feature.getId()}"
+                th:data-target="'#letter-'+${feature.getId()} " type="button">
+            私信
+
+        </button>
+
+
+    </div>
+
+    <div class="collapse fade" style="margin: 0 20px" th:id="'letter-'+${feature.getId()}  ">
+        <div class="md-form input-group mb-3 ">
+            <input aria-label="私信" class="form-control" name="content"
+                   th:aria-describedby="'letter-button-' + ${feature.getId()}"
+                   th:id="'letter-button-' + ${feature.getId()}+'-input'"
+                   type="text">
+            <label th:for="'letter-button-' + ${feature.getId()}+'-input'">
+                私信
+            </label>
+            <div class="input-group-append ">
+                <button class="btn btn-md btn-secondary m-0 px-3"
+                        th:id="'letter-button-' + ${feature.getId()}"
+                        th:onclick="sendMessage([[${feature.getId()}]])">发送
+                </button>
+            </div>
         </div>
     </div>
 
-
     <!-- Content -->
     <div class="card-body">
+
+
         <!-- Name -->
         <h4 class="card-title"><strong th:text="${feature.getUser().getUsername()}">用户名</strong></h4>
         <!-- Subtitle -->

@@ -2,17 +2,17 @@ package tk.tnicy.matchbox.web;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import tk.tnicy.matchbox.domain.Feature;
-import tk.tnicy.matchbox.domain.User;
+import tk.tnicy.matchbox.domain.Message;
 import tk.tnicy.matchbox.service.FeatureService;
+import tk.tnicy.matchbox.service.MessageService;
 import tk.tnicy.matchbox.service.UserService;
 import tk.tnicy.matchbox.service.Util;
 
@@ -26,6 +26,8 @@ public class FriendsController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    MessageService messageService;
 
     @Autowired
     FeatureService featureService;
@@ -47,47 +49,39 @@ public class FriendsController {
             result.add(b);
         }
 
-        List<Feature> features = featureService.findAllByIdIn(result, 0, 20, Sort.unsorted());
-
         List<Feature> follows = util.getCurrentFeature().getFollows();
 
-        for (Feature followed :
-                follows) {
-            features.remove(followed);
+        ArrayList<Feature> features = new ArrayList<>();
+        for (Long b :
+                result) {
+            Feature gotFeature = featureService.findFeatureById(b);
+            if (!follows.contains(gotFeature)) {
+                features.add(gotFeature);
+            }
         }
 
         model.addAttribute("features", features);
         return "newFriends";
     }
 
-    @Transactional
-    @RequiresPermissions("normal")
-    @PostMapping("/followUser")
-    @ResponseBody
-    public String followUser(@RequestBody User user) {
-        User me = util.getCurrentUser();
-        User target = userService.findUserById(user.getId());
-        me.getFeature().getFollows().add(target.getFeature());
 
-        userService.saveAndFlush(me);
-        return "ok";
+    @RequiresPermissions("normal")
+    @PostMapping("/letter/{targetId}")
+    public ResponseEntity letter(@RequestBody Message message, @PathVariable("targetId") Long targetId) {
+        Feature me = util.getCurrentFeature();
+        Feature you = featureService.findFeatureById(targetId);
+
+
+        Message m = new Message();
+        m.setContent(message.getContent());
+        m.setTime(Util.now());
+        m.setReceiver(you);
+        m.setSender(me);
+
+        messageService.save(m);
+
+        return ResponseEntity.ok("ok");
     }
 
-    @Transactional
-    @RequiresPermissions("normal")
-    @PostMapping("/unfollowUser")
-    @ResponseBody
-    public String unfollowUser(@RequestBody User user) {
-        User me = util.getCurrentUser();
-        User target = userService.findUserById(user.getId());
-        Feature feature = target.getFeature();
 
-        List<Feature> follows = me.getFeature().getFollows();
-
-
-        follows.remove(feature);
-
-        userService.saveAndFlush(me);
-        return "ok";
-    }
 }

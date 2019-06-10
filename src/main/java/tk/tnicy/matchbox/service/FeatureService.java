@@ -20,4 +20,14 @@ public class FeatureService {
         return featureRepository.findAllByIdIn(id, pr).getContent();
     }
 
+
+    public Feature findFeatureById(Long id) {
+        return featureRepository.findFeatureById(id);
+    }
+
+
+    public Feature save(Feature feature) {
+        return featureRepository.save(feature);
+    }
+
 }

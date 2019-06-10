@@ -49,14 +49,6 @@ public class Feature implements Serializable {
 
 //    里程碑
 
-    //    message
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sender")
-    private List<Message> sentMessages;
-
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "receiver")
-    private List<Message> receivedMessages;
 
     //      关注的人
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -79,5 +71,13 @@ public class Feature implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "Feature{" +
+                "id=" + id +
+                ", user=" + user +
+                '}';
     }
 }

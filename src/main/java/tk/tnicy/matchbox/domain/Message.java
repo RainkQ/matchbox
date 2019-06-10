@@ -1,11 +1,9 @@
 package tk.tnicy.matchbox.domain;
 
 import lombok.Data;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "message")
@@ -24,16 +22,14 @@ public class Message {
     private String content;
 
     //    @Temporal(TemporalType.TIMESTAMP)
-    private Date time; // 日期类型，格式：yyyy-MM-dd HH:mm:ss
+    private Timestamp time; // 日期类型，格式：yyyy-MM-dd HH:mm:ss
 
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Feature.class)
     @JoinColumn(name = "sender_id")
     private Feature sender;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(targetEntity = Feature.class)
     @JoinColumn(name = "receiver_id")
     private Feature receiver;
 

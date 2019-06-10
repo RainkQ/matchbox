@@ -52,3 +52,26 @@ function unfollow(id) {
     });
 }
 
+function sendMessage(id) {
+
+    let content = $('#letter-button-' + id + '-input').val();
+
+    console.log(content);
+    let jsonObj = {"content": content};
+    $.ajax({
+        type: 'POST',
+        url: "/letter/" + id,
+        dataType: "json",
+        data: JSON.stringify(jsonObj),
+        contentType: "application/json",
+        success: function (data) {
+            console.log(data)
+        },
+        error: function () {
+            console.log("fucking error")
+        },
+        complete: function () {
+            $('#main').load(window.location.href + " .card-columns")
+        }
+    });
+}
