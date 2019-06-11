@@ -2,6 +2,7 @@ package tk.tnicy.matchbox.web;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,6 +60,12 @@ public class FriendsController {
                 features.add(gotFeature);
             }
         }
+
+
+        List<Message> rec = messageService.findMessagesByReceiver(util.getCurrentFeature(),
+                0, 20, Sort.by("time").descending());
+        model.addAttribute("letters", rec);
+
 
         model.addAttribute("features", features);
         return "newFriends";

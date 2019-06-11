@@ -1,5 +1,7 @@
 package tk.tnicy.matchbox.domain;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,9 +13,11 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     Message saveAndFlush(Message message);
 
-    List<Message> findMessagesBySender(Long sender);
+    List<Message> findMessagesBySender(Feature sender);
 
-    List<Message> findMessagesByReceiver(Long receiver);
+    List<Message> findMessagesByReceiver(Feature receiver);
 
-    List<Message> findMessagesBySenderAndReceiver(Long sender_id, Long receiver_id);
+    Page<Message> findMessagesByReceiver(Feature receiver, Pageable pageable);
+
+    List<Message> findMessagesBySenderAndReceiver(Feature sender, Feature receiver);
 }

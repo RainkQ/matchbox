@@ -15,6 +15,10 @@
 
     </div>
     <div th:replace="components::pagination(explore,${page})"></div>
+
+
+    <div th:replace="components::messagesModelButton"></div>
+    <div th:replace="components::messagesModelView(${letters})"></div>
 </div>
 <footer th:replace="components::footBar"></footer>
 

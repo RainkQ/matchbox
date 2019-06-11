@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <meta content="ie=edge" http-equiv="x-ua-compatible">
-    <link href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link href="../static/assets/MDB/css/font-awesome.css" rel="stylesheet">
     <link href="../static/assets/MDB/css/style.css" rel="stylesheet">
     <style type="text/css">/* Chart.js */
     @-webkit-keyframes chartjs-render-animation {
@@ -240,6 +240,7 @@
             <div class="col-3 text-right">
                 <img class="rounded-circle img-responsive"
                      style="height: 40px; width: 40px;"
+                     th:onclick="window.open('/detail/'+[[${feature.getUser().getId()}]], '_self')"
                      th:src="${feature.getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+feature.getAvatarUUID()+'?imageView2/1/w/200/h/200/interlace/1' : '../static/assets/img/avatar.png'}">
 
             </div>
@@ -343,6 +344,7 @@
 
         <img class="rounded-circle img-responsive"
              style="height: 60px; width: 60px;"
+             th:onclick="window.open('/detail/'+[[${feature.getUser().getId()}]], '_self')"
              th:src="${feature.getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+feature.getAvatarUUID()+'?imageView2/1/w/200/h/200/interlace/1' : '../static/assets/img/avatar.png'}">
 
         <button aria-expanded="true" class="btn btn-rounded btn-sm blue-gradient"
@@ -408,6 +410,91 @@
     </div>
 
 </div>
+
+
+<div class="fixed-bottom" th:fragment="messagesModelButton">
+    <!-- Button trigger modal -->
+    <a class=" btn-floating btn-lg  purple-gradient float-right" data-target="#messagesModel" data-toggle="modal"
+       type="button">
+        <i class="far fa-envelope"></i>
+    </a>
+
+
+</div>
+<!-- Full Height Modal Right -->
+<div aria-hidden="true"
+     aria-labelledby="myModalLabel" class="modal fade right"
+     id="messagesModel" role="dialog" tabindex="-1"
+     th:fragment="messagesModelView(letters)">
+
+    <!-- Add class .modal-full-height and then add class .modal-right (or other classes from list above) to set a position to the modal -->
+    <div class="modal-dialog modal-full-height modal-lg modal-right" role="document">
+
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title w-100" id="myModalLabel">私信</h5>
+                <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--/*@thymesVar id="letters" type="java.util.List<tk.tnicy.matchbox.domain.Message>"*/-->
+                <div class="card-columns">
+
+                    <!-- Card -->
+                    <div class="card testimonial-card "
+                         th:each="letter : ${letters}">
+
+                        <!-- Background color -->
+                        <div class="card-up blue-gradient" style="height: 30px"></div>
+
+                        <!-- Avatar -->
+                        <div class="row" style="height: 40px; margin-top: -20px; border: 0;">
+                            <div class="col-3 text-right">
+                                <img class="rounded-circle img-responsive"
+                                     style="height: 40px; width: 40px;"
+                                     th:src="${letter.getSender().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+letter.getSender().getAvatarUUID()+'?imageView2/1/w/200/h/200/interlace/1' : '../static/assets/img/avatar.png'}">
+
+                            </div>
+                            <div class="col-9" style="margin-top: -5px;">
+                                <h5 class=" text-white " style="max-height: 20px;"
+                                    th:text="${letter.getSender().getUser().getUsername()}">Martha
+                                    Smith</h5>
+                                <h6 class="text-black-50 overflow-auto" style="max-height: 20px;"
+                                    th:text="${letter.getSender().getSignature()}">
+                                    sig</h6>
+                            </div>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="card-body " style="padding-top: 0.5rem; padding-bottom: 0.5px;">
+                            <!-- Name -->
+                            <hr style="margin: 5px">
+                            <!-- Quotation -->
+                            <p class="text-dark" th:text="${letter.getContent()}"> Lorem ipsum dolor sit amet,
+                                consectetur
+                                adipisicing elit. Eos,
+                                adipisci</p>
+                            <hr style="margin: 5px">
+                            <p class="text-right" style="padding-top: .25em; font-size: 0.75rem;opacity: .75;"
+                               th:text="${letter.getTime()}">time</p>
+                        </div>
+
+                    </div>
+                    <!-- Card -->
+                </div>
+
+            </div>
+            <!--            <div class="modal-footer justify-content-center">-->
+            <!--                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+            <!--                <button type="button" class="btn btn-primary">Save changes</button>-->
+            <!--            </div>-->
+        </div>
+    </div>
+</div>
+<!-- Full Height Modal Right -->
+
 
 
 </body>

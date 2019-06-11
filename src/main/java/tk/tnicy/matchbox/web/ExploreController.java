@@ -7,7 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import tk.tnicy.matchbox.domain.Message;
 import tk.tnicy.matchbox.domain.Post;
+import tk.tnicy.matchbox.service.MessageService;
 import tk.tnicy.matchbox.service.PostService;
 import tk.tnicy.matchbox.service.UserService;
 import tk.tnicy.matchbox.service.Util;
@@ -21,6 +23,8 @@ public class ExploreController {
     UserService userService;
     @Autowired
     PostService postService;
+    @Autowired
+    MessageService messageService;
     @Autowired
     Util util;
 
@@ -38,6 +42,11 @@ public class ExploreController {
 
         model.addAttribute("posts", posts);
         model.addAttribute("page", page);
+
+        List<Message> rec = messageService.findMessagesByReceiver(util.getCurrentFeature(),
+                0, 20, Sort.by("time").descending());
+        model.addAttribute("letters", rec);
+
 
         return "explore";
     }

@@ -9,67 +9,83 @@
 <main>
     <div class="container text-center">
 
+        <div class="row">
+            <div class="col-sm-4" style="margin-bottom: 20px">
+                <!-- Card -->
+                <div class="card testimonial-card">
 
-        <!-- Card -->
-        <div class="card testimonial-card">
+                    <!-- Background color -->
+                    <div class="card-up aqua-gradient"></div>
 
-            <!-- Background color -->
-            <div class="card-up aqua-gradient"></div>
-
-            <!-- Avatar -->
-            <div class="avatar mx-auto white">
-                <img alt="avatar" class="rounded-circle" id="avatar"
-                     th:src="${user.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID()+'?imageView2/1/w/200/h/200/interlace/1' : '../static/assets/img/avatar.png'}">
-            </div>
-            <div class="text-center">
-                <a class="btn btn-default btn-rounded" data-target="#modalLoginAvatar" data-toggle="modal" href="">
-                    更换头像
-                </a>
-            </div>
-
-            <!-- Content -->
-            <div class="card-body">
-                <!-- Name -->
-                <h4 class="card-title"><strong th:text="${user.getUsername()}">用户名</strong></h4>
-                <!-- Subtitle -->
-                <div id="gender-div">
-                    <h6 class="font-weight-bold indigo-text py-2" id="gender" onclick="changeGender()"
-                        th:text="${user.getFeature().getGender()}==true?'小哥哥':'小姐姐'">性别
-                    </h6>
-                </div>
-                <hr>
-                <!-- Quotation -->
-                <p id="personalDescription">
-                    <img src="../static/assets/img/quote-left.svg" width="20">
-
-                    <span id="signature" onclick="changeSignature()" style="white-space:pre"
-                          th:text="${user.getFeature().getSignature()!=null?user.getFeature().getSignature():'还没有写个性签名呢！'}"></span>
-
-                    <img src="../static/assets/img/quote-right.svg" width="20">
-                </p>
-                <hr>
-
-                <div id="tags">
-
-                    <div class="btn-group" role="group" th:each="tag : ${user.getFeature().getTags()}">
-                        <button class="btn btn-rounded btn-sm aqua-gradient"
-                                th:text="${tag.getLabel()}">Aqua
-                        </button>
-                        <button class="btn btn-rounded btn-sm blue-gradient"
-                                th:onclick="deleteTag([[${tag.getId()}]],[[${tag.getLabel()}]])">
-                            &times;
-                        </button>
+                    <!-- Avatar -->
+                    <div class="avatar mx-auto white">
+                        <img alt="avatar" class="rounded-circle" id="avatar"
+                             th:src="${user.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+user.getFeature().getAvatarUUID()+'?imageView2/1/w/200/h/200/interlace/1' : '../static/assets/img/avatar.png'}">
+                    </div>
+                    <div class="text-center">
+                        <a class="btn btn-default btn-rounded" data-target="#modalLoginAvatar" data-toggle="modal"
+                           href="">
+                            更换头像
+                        </a>
                     </div>
 
+                    <!-- Content -->
+                    <div class="card-body">
+                        <!-- Name -->
+                        <h4 class="card-title"><strong th:text="${user.getUsername()}">用户名</strong></h4>
+                        <!-- Subtitle -->
+                        <div id="gender-div">
+                            <h6 class="font-weight-bold indigo-text py-2" id="gender" onclick="changeGender()"
+                                th:text="${user.getFeature().getGender()}==true?'小哥哥':'小姐姐'">性别
+                            </h6>
+                        </div>
+                        <hr>
+                        <!-- Quotation -->
+                        <p id="personalDescription">
+                            <img src="../static/assets/img/quote-left.svg" width="20">
 
-                    <button class="btn btn-rounded btn-sm aqua-gradient" id="addTag_btn" onclick="addTag()"><img
-                            src="../static/assets/img/plus.svg" width="20"></button>
+                            <span id="signature" onclick="changeSignature()" style="white-space:pre"
+                                  th:text="${user.getFeature().getSignature()!=null?user.getFeature().getSignature():'还没有写个性签名呢！'}"></span>
+
+                            <img src="../static/assets/img/quote-right.svg" width="20">
+                        </p>
+                        <hr>
+
+                        <div id="tags">
+
+                            <div class="btn-group" role="group" th:each="tag : ${user.getFeature().getTags()}">
+                                <button class="btn btn-rounded btn-sm aqua-gradient"
+                                        th:text="${tag.getLabel()}">Aqua
+                                </button>
+                                <button class="btn btn-rounded btn-sm blue-gradient"
+                                        th:onclick="deleteTag([[${tag.getId()}]],[[${tag.getLabel()}]])">
+                                    &times;
+                                </button>
+                            </div>
+
+
+                            <button class="btn btn-rounded btn-sm aqua-gradient" id="addTag_btn" onclick="addTag()"><img
+                                    src="../static/assets/img/plus.svg" width="20"></button>
+                        </div>
+
+                    </div>
+
                 </div>
-
+                <!-- Card -->
+            </div>
+            <div class="col-sm-8">
+                <div class="card-columns" id="posts">
+                    <!--/*@thymesVar id="detailUserPosts" type="java.util.ArrayList<tk.tnicy.matchbox.domain.Post>"*/-->
+                    <div th:each="postContent : ${detailUserPosts}">
+                        <div th:replace="components::post(${postContent})"></div>
+                    </div>
+                </div>
+                <div th:replace="components::pagination(userInfo,${page})"></div>
             </div>
 
+
         </div>
-        <!-- Card -->
+
 
         <!--Modal: modal with Avatar Form-->
         <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modalLoginAvatar" role="dialog"

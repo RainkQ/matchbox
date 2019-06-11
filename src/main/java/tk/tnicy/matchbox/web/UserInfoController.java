@@ -2,22 +2,20 @@ package tk.tnicy.matchbox.web;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import tk.tnicy.matchbox.domain.Feature;
-import tk.tnicy.matchbox.domain.Tag;
-import tk.tnicy.matchbox.domain.User;
-import tk.tnicy.matchbox.service.QiniuUploadFileService;
-import tk.tnicy.matchbox.service.UserService;
-import tk.tnicy.matchbox.service.Util;
+import tk.tnicy.matchbox.domain.*;
+import tk.tnicy.matchbox.service.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,6 +25,11 @@ public class UserInfoController {
     @Autowired
     UserService userService;
     @Autowired
+    MessageService messageService;
+    @Autowired
+    PostService postService;
+
+    @Autowired
     Util util;
 
     @Autowired
@@ -35,10 +38,30 @@ public class UserInfoController {
 
     @Transactional
     @RequiresPermissions("normal")
-    @GetMapping("/userInfo")
-    public String getUserInfo(Model model) {
+    @GetMapping({"/userInfo", "/userInfo/{page}"})
+    public String getUserInfo(Model model,
+                              @PathVariable(name = "page", required = false) Integer page) {
 
         util.injectUser(model);
+
+        if (page == null) {
+            page = 0;
+        }
+
+        User me = util.getCurrentUser();
+
+
+        List<Message> rec = messageService.findMessagesByReceiver(util.getCurrentFeature(),
+                page, 20, Sort.by("time").descending());
+        model.addAttribute("letters", rec);
+
+        model.addAttribute("page", page);
+
+        model.addAttribute("detailUser", me);
+
+
+        List<Post> posts = postService.getPosts(me.getFeature());
+        model.addAttribute("detailUserPosts", posts);
 
 
         return "userInfo";
@@ -46,6 +69,45 @@ public class UserInfoController {
 
     }
 
+
+    @RequiresPermissions("normal")
+    @GetMapping({"/detail/{userId}", "/detail/{userId}/{page}"})
+    public String someoneDetail(@PathVariable("userId") Long id, Model model,
+                                @PathVariable(name = "page", required = false) Integer page) {
+
+        util.injectUser(model);
+
+        if (page == null) {
+            page = 0;
+        }
+
+
+        User me = util.getCurrentUser();
+        User you = userService.findUserById(id);
+        if (you == null) {
+            return "redirect:/";
+        }
+
+        List<Message> rec = messageService.findMessagesByReceiver(util.getCurrentFeature(),
+                0, 20, Sort.by("time").descending());
+        model.addAttribute("letters", rec);
+
+        model.addAttribute("page", 0);
+
+        model.addAttribute("detailUser", you);
+
+        List<Post> posts = null;
+        if (me.getFeature().getFollows().contains(you.getFeature())) {
+            posts = postService.getPostsByAuthorFollowed(you.getFeature(), page, 20, Sort.by("time").descending());
+            model.addAttribute("detailUserPosts", posts);
+        } else {
+            posts = postService.getAuthorsPublicPosts(you.getFeature(), page, 20, Sort.by("time").descending());
+            model.addAttribute("detailUserPosts", posts);
+
+        }
+
+        return "SomeoneDetail";
+    }
 
     //    @Transactional
     @RequiresPermissions("normal")

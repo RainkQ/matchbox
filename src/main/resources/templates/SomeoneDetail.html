@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-cn"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="components::head"></head>
+<body>
+<header th:replace="components::navBar(detail,${user})"></header>
+<div class="container">
+
+    <div class="row">
+        <div class="col-sm-4" style="margin-bottom: 20px">
+            <!-- Card -->
+            <div class="card testimonial-card">
+
+                <!-- Background color -->
+                <div class="card-up aqua-gradient" style="height: 80px;"></div>
+
+                <!-- Avatar -->
+                <div class="avatar mx-auto white">
+                    <img alt="avatar" class="rounded-circle" id="avatar"
+                         th:src="${detailUser.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+detailUser.getFeature().getAvatarUUID()+'?imageView2/1/w/200/h/200/interlace/1' : '../static/assets/img/avatar.png'}">
+                </div>
+
+                <!-- Content -->
+                <div class="card-body">
+                    <!-- Name -->
+                    <h4 class="card-title"><strong th:text="${detailUser.getUsername()}">用户名</strong></h4>
+                    <!-- Subtitle -->
+                    <div id="gender-div">
+                        <h6 class="font-weight-bold indigo-text py-2" id="gender"
+                            th:text="${detailUser.getFeature().getGender()}==true?'小哥哥':'小姐姐'">性别
+                        </h6>
+                    </div>
+                    <hr>
+                    <!-- Quotation -->
+                    <p id="personalDescription">
+                        <img src="../static/assets/img/quote-left.svg" width="20">
+
+                        <span id="signature" style="white-space:pre"
+                              th:text="${detailUser.getFeature().getSignature()!=null?detailUser.getFeature().getSignature():'还没有写个性签名呢！'}"></span>
+
+                        <img src="../static/assets/img/quote-right.svg" width="20">
+                    </p>
+                    <hr>
+
+                    <div id="tags">
+
+                        <div class="btn-group" role="group" th:each="tag : ${detailUser.getFeature().getTags()}">
+                            <button class="btn btn-rounded btn-sm aqua-gradient"
+                                    th:text="${tag.getLabel()}">Aqua
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+            <!-- Card -->
+        </div>
+        <div class="col-sm-8">
+            <div class="card-columns" id="posts">
+                <!--/*@thymesVar id="detailUserPosts" type="java.util.ArrayList<tk.tnicy.matchbox.domain.Post>"*/-->
+                <div th:each="postContent : ${detailUserPosts}">
+                    <div th:replace="components::post(${postContent})"></div>
+                </div>
+            </div>
+            <div th:replace="components::pagination('detail/'+${detailUser.getId()},${page})"></div>
+        </div>
+
+
+    </div>
+
+    <div th:replace="components::messagesModelButton"></div>
+    <div th:replace="components::messagesModelView(${letters})"></div>
+
+
+</div>
+<footer th:replace="components::footBar"></footer>
+
+
+<div th:replace="components::js"></div>
+</body>
+</html>

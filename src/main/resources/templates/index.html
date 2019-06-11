@@ -5,6 +5,7 @@
 <head th:replace="components::head"></head>
 
 <body>
+<!--/*@thymesVar id="user" type="tk.tnicy.matchbox.domain.User"*/-->
 <header th:replace="components::navBar(index,${user})"></header>
 <div class="container">
     <div th:replace="components::creatPostBox"></div>
@@ -15,7 +16,15 @@
         </div>
     </div>
 
+
     <div th:replace="components::pagination(index,${page})"></div>
+
+    <div th:if="${logined}">
+        <div th:replace="components::messagesModelButton"></div>
+        <div th:replace="components::messagesModelView(${letters})"></div>
+    </div>
+
+
 </div>
 <footer th:replace="components::footBar"></footer>
 

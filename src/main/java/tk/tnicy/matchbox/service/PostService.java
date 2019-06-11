@@ -23,11 +23,15 @@ public class PostService {
 
     //    第page页 每页number个
 //    @Cacheable(value = "posts", key = "#me+#page+#size+#sort", unless = "#result == null")
-    public List<Post> getMyFollowPosts(Feature me, int page, int size, Sort sort) {
+    public List<Post> getMyFollowPosts(Feature me, Integer page, Integer size, Sort sort) {
         PageRequest pr = new PageRequest(page, size, sort);
         return postRepository.findAllByAuthorInAndTypeGreaterThanEqual(me.getFollows(), 0, pr).getContent();
     }
 
+    public List<Post> getAuthorsPublicPosts(Feature author, Integer page, Integer size, Sort sort) {
+        PageRequest pr = new PageRequest(page, size, sort);
+        return postRepository.findAllByAuthorAndTypeGreaterThan(author, 0, pr).getContent();
+    }
 
     //    @Cacheable(value = "posts", key = "#author", unless = "#result == null")
     public List<Post> getPosts(Feature author) {
@@ -36,9 +40,9 @@ public class PostService {
 
 
     //    @Cacheable(value = "posts", key = "#author+#page+#size+#sort", unless = "#result == null")
-    public List<Post> getPosts(Feature author, int page, int size, Sort sort) {
+    public List<Post> getPostsByAuthorFollowed(Feature author, int page, int size, Sort sort) {
         PageRequest pr = new PageRequest(page, size, sort);
-        return postRepository.findAllByAuthor(author, pr).getContent();
+        return postRepository.findAllByAuthorAndTypeGreaterThan(author, -1, pr).getContent();
     }
 
 
