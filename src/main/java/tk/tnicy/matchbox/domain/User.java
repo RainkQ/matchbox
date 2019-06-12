@@ -9,7 +9,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "normal_user")
+@Table(name = "normal_user",
+        indexes = {
+                @Index(name = "username_index", columnList = "username", unique = true),
+                @Index(name = "feature_index", columnList = "feature_id", unique = true)
+
+        })
 @Data
 @NoArgsConstructor
 public class User implements Serializable {

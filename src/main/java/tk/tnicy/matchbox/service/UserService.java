@@ -36,6 +36,14 @@ public class UserService {
 
     public boolean registerUser(String username, String password) {
 
+        User hadUser = userRepository.findUserByUsername(username);
+        // 看数据库中是否存在该账户
+        if (hadUser != null) {
+            System.out.println("已有用户：" + hadUser.toString());
+            return false;
+        }
+
+
         // 将用户名作为盐值
         ByteSource salt = ByteSource.Util.bytes(username);
         /*
@@ -59,14 +67,8 @@ public class UserService {
         user.getFeature().setAvatar(new Avatar());
         user.getFeature().setPosts(new ArrayList<>());
 
-        // 看数据库中是否存在该账户
-        User hadUser = userRepository.findUserByUsername(username);
-        if (hadUser == null) {
-            userRepository.save(user);
-            return true;
-        }
-        System.out.println("已有用户：" + hadUser.toString());
-        return false;
+        userRepository.save(user);
+        return true;
     }
 
 

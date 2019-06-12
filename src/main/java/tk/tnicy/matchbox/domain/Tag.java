@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "tag")
+@Table(name = "tag", indexes = {@Index(name = "label_index", columnList = "label")})
 @Data
 public class Tag implements Serializable {
     @Id

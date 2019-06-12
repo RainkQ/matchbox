@@ -1,14 +1,22 @@
 package tk.tnicy.matchbox.web;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import tk.tnicy.matchbox.domain.Post;
-import tk.tnicy.matchbox.domain.User;
+import tk.tnicy.matchbox.domain.*;
 import tk.tnicy.matchbox.service.PostService;
 import tk.tnicy.matchbox.service.UserService;
 import tk.tnicy.matchbox.service.Util;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.lang.reflect.Type;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class TestController {
@@ -23,23 +31,67 @@ public class TestController {
     @Autowired
     Util util;
 
-    @RequiresPermissions("normal")
+    private static final Type TYPE = new TypeToken<List<JsonUser>>() {
+    }.getType();
+
+
+
     @GetMapping(value = "/test")
     public String test() {
-        User user = util.getCurrentUser();
+        Gson g = new Gson();
+        String filename = "fakedUsers.json";
+        try {
+            JsonReader reader = new JsonReader(new FileReader(filename));
+            List<JsonUser> users = g.fromJson(reader, TYPE);
+//            System.out.println(users.get(0));
+            int time = 0;
+            for (JsonUser u :
+                    users) {
+                convertAndWriteOther(u);
+                time++;
+                if (time % 200 == 0) {
+                    System.out.println("time: " + time);
+                }
+            }
 
-        Post post = new Post();
-        post.setId(null);
-        post.setAuthor(user.getFeature());
-        post.setContent("淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦淦");
-        post.setTime(Util.now());
-        post.setType(1);
 
-        user.getFeature().getPosts().add(post);
-        userService.save(user);
-
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         return "redirect:/";
+    }
+
+
+    public void convertAndWriteOther(JsonUser jsonUser) {
+        userService.registerUser(jsonUser.getName(), jsonUser.getPassword());
+        User newUser = userService.findUserByUsername(jsonUser.getName());
+        Feature newUserFeature = newUser.getFeature();
+        for (JsonUser.Post post :
+                jsonUser.getPosts()) {
+            Post p = new Post();
+            p.setTime(Timestamp.valueOf(post.getTime()));
+            p.setContent(post.getContent());
+            p.setAuthor(newUserFeature);
+            p.setType(post.getType());
+
+            newUserFeature.getPosts().add(p);
+        }
+
+        newUserFeature.setSignature(jsonUser.getSignature());
+
+        for (String tag :
+                jsonUser.getTags()) {
+            Tag t = new Tag();
+            t.setLabel(tag);
+
+            Tag existedTag = userService.findTagByLabel(tag);
+            newUserFeature.getTags().add(Objects.requireNonNullElse(existedTag, t));
+
+
+        }
+
+        userService.save(newUser);
     }
 
 }
