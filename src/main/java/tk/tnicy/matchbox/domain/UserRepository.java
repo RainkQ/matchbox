@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -34,14 +33,22 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findUserById(Long id);
 
 
-    @Query(value = "WITH seq_a AS ( SELECT id_a, similarity FROM similarityinfo WHERE id_b = :id ),\n" +
-            "seq_b AS ( SELECT id_b, similarity FROM similarityinfo WHERE id_a = :id ),\n" +
-            "seq ( ID, similarity ) AS ( SELECT * FROM ( SELECT * FROM seq_a UNION SELECT * FROM seq_b ) AS tem ),\n" +
-            "userwithsimilarity AS ( SELECT * FROM ( seq NATURAL JOIN feature ) ) SELECT ID \n" +
-            "FROM\n" +
-            "\tuserwithsimilarity \n" +
-            "ORDER BY\n" +
-            "\tsimilarity DESC;",
+    @Query(value = "WITH tags AS (\n" +
+            "  SELECT tags_id\n" +
+            "\tFROM feature_tags\n" +
+            "\tWHERE feature_id = 1006\n" +
+            "),\n" +
+            "      friends AS (\n" +
+            "  SELECT feature_id \n" +
+            "  FROM feature_tags\n" +
+            "  WHERE tags_id in (SELECT * FROM tags) AND feature_id <> 1006\n" +
+            "),\n" +
+            "\t    friends_similarity AS (\n" +
+            "\tSELECT DISTINCT feature_id, getsimilarity(1006,feature_id) AS similarity\n" +
+            "\tFROM friends\n" +
+            ")\n" +
+            "\n" +
+            "SELECT feature_id FROM friends_similarity ORDER BY similarity DESC;",
             nativeQuery = true)
-    List<BigInteger> findUserBySimilarity(@Param("id") Long id);
+    List<Feature> findUserBySimilarity(@Param("id") Long id);
 }
