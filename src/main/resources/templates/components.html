@@ -454,6 +454,7 @@
                             <div class="col-3 text-right">
                                 <img class="rounded-circle img-responsive"
                                      style="height: 40px; width: 40px;"
+                                     th:onclick="window.open('/detail/'+[[${letter.getSender().getUser().getId()}]], '_self')"
                                      th:src="${letter.getSender().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+letter.getSender().getAvatarUUID()+'?imageView2/1/w/200/h/200/interlace/1' : '../static/assets/img/avatar.png'}">
 
                             </div>

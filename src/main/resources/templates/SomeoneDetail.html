@@ -5,39 +5,85 @@
 <head th:replace="components::head"></head>
 <body>
 <header th:replace="components::navBar(detail,${user})"></header>
-<div class="container">
+<div class="container" id="main">
 
-    <div class="row">
+    <div class="row" id="detail">
         <div class="col-sm-4" style="margin-bottom: 20px">
-            <!-- Card -->
-            <div class="card testimonial-card">
+
+            <!--/*@thymesVar id="feature" type="tk.tnicy.matchbox.domain.Feature"*/-->
+            <!--/*@thymesVar id="followed" type="java.lang.Boolean"*/-->
+            <div class="card testimonial-card" th:with="feature = ${detailUser.getFeature()}">
+                <!-- userCard -->
 
                 <!-- Background color -->
-                <div class="card-up aqua-gradient" style="height: 80px;"></div>
+                <div class="card-up aqua-gradient" style="height: 45px"></div>
+
 
                 <!-- Avatar -->
-                <div class="avatar mx-auto white">
-                    <img alt="avatar" class="rounded-circle" id="avatar"
-                         th:src="${detailUser.getFeature().getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+detailUser.getFeature().getAvatarUUID()+'?imageView2/1/w/200/h/200/interlace/1' : '../static/assets/img/avatar.png'}">
+                <div class="d-flex align-items-center justify-content-around " style=" margin-top: -30px; border: 0;">
+
+
+                    <button class="btn btn-rounded btn-sm peach-gradient" th:if="!${followed}"
+                            th:onclick="followDetail([[${feature.getUser().getId()}]], '/detail/'+[[${detailUser.getId()}]],'#detail')"
+                            type="button"> 关注
+                    </button>
+                    <button class="btn btn-rounded btn-sm peach-gradient" th:if="${followed}"
+                            th:onclick="unfollowDetail([[${feature.getUser().getId()}]],  '/detail/'+[[${detailUser.getId()}]],'#detail')"
+                            type="button"> 取关
+                    </button>
+
+                    <img class="rounded-circle img-responsive"
+                         style="height: 60px; width: 60px;"
+                         th:onclick="window.open('/detail/'+[[${feature.getUser().getId()}]], '_self')"
+                         th:src="${feature.getAvatarUUID()!=null?'http://prv0aejgs.bkt.clouddn.com/'+feature.getAvatarUUID()+'?imageView2/1/w/200/h/200/interlace/1' : '../static/assets/img/avatar.png'}">
+
+                    <button aria-expanded="true" class="btn btn-rounded btn-sm blue-gradient"
+                            data-toggle="collapse" th:aria-controls="'letter-' + ${feature.getId()}"
+                            th:data-target="'#letter-'+${feature.getId()} " type="button">
+                        私信
+
+                    </button>
+
+
+                </div>
+
+                <div class="collapse fade" style="margin: 0 20px" th:id="'letter-'+${feature.getId()}  ">
+                    <div class="md-form input-group mb-3 ">
+                        <input aria-label="私信" class="form-control" name="content"
+                               th:aria-describedby="'letter-button-' + ${feature.getId()}"
+                               th:id="'letter-button-' + ${feature.getId()}+'-input'"
+                               type="text">
+                        <label th:for="'letter-button-' + ${feature.getId()}+'-input'">
+                            私信
+                        </label>
+                        <div class="input-group-append ">
+                            <button class="btn btn-md btn-secondary m-0 px-3"
+                                    th:id="'letter-button-' + ${feature.getId()}"
+                                    th:onclick="sendMessage([[${feature.getId()}]])">发送
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Content -->
                 <div class="card-body">
+
+
                     <!-- Name -->
-                    <h4 class="card-title"><strong th:text="${detailUser.getUsername()}">用户名</strong></h4>
+                    <h4 class="card-title"><strong th:text="${feature.getUser().getUsername()}">用户名</strong></h4>
                     <!-- Subtitle -->
                     <div id="gender-div">
                         <h6 class="font-weight-bold indigo-text py-2" id="gender"
-                            th:text="${detailUser.getFeature().getGender()}==true?'小哥哥':'小姐姐'">性别
+                            th:text="${feature.getGender()}==true?'小哥哥':'小姐姐'">性别
                         </h6>
                     </div>
                     <hr>
                     <!-- Quotation -->
-                    <p id="personalDescription">
+                    <p class="overflow-auto" id="personalDescription">
                         <img src="../static/assets/img/quote-left.svg" width="20">
 
                         <span id="signature" style="white-space:pre"
-                              th:text="${detailUser.getFeature().getSignature()!=null?detailUser.getFeature().getSignature():'还没有写个性签名呢！'}"></span>
+                              th:text="${feature.getSignature()!=null?feature.getSignature():'还没有写个性签名呢！'}"></span>
 
                         <img src="../static/assets/img/quote-right.svg" width="20">
                     </p>
@@ -45,18 +91,16 @@
 
                     <div id="tags">
 
-                        <div class="btn-group" role="group" th:each="tag : ${detailUser.getFeature().getTags()}">
-                            <button class="btn btn-rounded btn-sm aqua-gradient"
-                                    th:text="${tag.getLabel()}">Aqua
-                            </button>
-                        </div>
+                        <button class="btn btn-rounded btn-sm aqua-gradient" th:each="tag : ${feature.getTags()}"
+                                th:text="${tag.getLabel()}">Aqua
+                        </button>
 
                     </div>
 
                 </div>
 
             </div>
-            <!-- Card -->
+
         </div>
         <div class="col-sm-8">
             <div class="card-columns" id="posts">

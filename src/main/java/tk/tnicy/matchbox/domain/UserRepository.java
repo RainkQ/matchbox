@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -32,23 +33,24 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findUserById(Long id);
 
-
+    @Cacheable(value = "similar", key = "#id", unless = "#result == null")
     @Query(value = "WITH tags AS (\n" +
             "  SELECT tags_id\n" +
             "\tFROM feature_tags\n" +
-            "\tWHERE feature_id = 1006\n" +
+            "\tWHERE feature_id = :id\n" +
             "),\n" +
             "      friends AS (\n" +
             "  SELECT feature_id \n" +
             "  FROM feature_tags\n" +
-            "  WHERE tags_id in (SELECT * FROM tags) AND feature_id <> 1006\n" +
+            "  WHERE tags_id in (SELECT * FROM tags) AND feature_id <> :id\n" +
             "),\n" +
             "\t    friends_similarity AS (\n" +
-            "\tSELECT DISTINCT feature_id, getsimilarity(1006,feature_id) AS similarity\n" +
+            "\tSELECT DISTINCT feature_id, getsimilarity(:id,feature_id) AS similarity\n" +
             "\tFROM friends\n" +
             ")\n" +
             "\n" +
-            "SELECT feature_id FROM friends_similarity ORDER BY similarity DESC;",
+            "SELECT feature_id FROM friends_similarity ORDER BY similarity DESC\n" +
+            "LIMIT 30;",
             nativeQuery = true)
-    List<Feature> findUserBySimilarity(@Param("id") Long id);
+    List<BigInteger> findUserBySimilarity(@Param("id") Long id);
 }

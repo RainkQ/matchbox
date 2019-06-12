@@ -75,3 +75,44 @@ function sendMessage(id) {
         }
     });
 }
+
+
+function followDetail(id, url, comp) {
+    let jsonObj = {"id": id};
+    $.ajax({
+        type: 'POST',
+        url: "/followUser",
+        dataType: "json",
+        data: JSON.stringify(jsonObj),
+        contentType: "application/json",
+        success: function (data) {
+            console.log(data)
+        },
+        error: function () {
+            console.log("fucking error")
+        },
+        complete: function () {
+            $("#main").load("http://rainkq.tk:49521/" + url + " " + comp);
+        }
+    });
+}
+
+function unfollowDetail(id, url, comp) {
+    let jsonObj = {"id": id};
+    $.ajax({
+        type: 'POST',
+        url: "/unfollowUser",
+        dataType: "json",
+        data: JSON.stringify(jsonObj),
+        contentType: "application/json",
+        success: function (data) {
+            console.log(data)
+        },
+        error: function () {
+            console.log("fucking error")
+        },
+        complete: function () {
+            $("#main").load("http://rainkq.tk:49521/" + url + " " + comp);
+        }
+    });
+}

@@ -96,6 +96,12 @@ public class UserInfoController {
 
         model.addAttribute("detailUser", you);
 
+        if (me.getFeature().getFollows().contains(you.getFeature())) {
+            model.addAttribute("followed", true);
+        } else {
+            model.addAttribute("followed", false);
+        }
+
         List<Post> posts = null;
         if (me.getFeature().getFollows().contains(you.getFeature())) {
             posts = postService.getPostsByAuthorFollowed(you.getFeature(), page, 20, Sort.by("time").descending());
